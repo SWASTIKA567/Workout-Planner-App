@@ -17,7 +17,7 @@ class _AgeScreenState extends State<AgeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Color(0xFFB1C8FF),
       body: SafeArea(
         child: Stack(
           children: [
@@ -46,7 +46,7 @@ class _AgeScreenState extends State<AgeScreen> {
                   backgroundColor: Colors.white,
                   child: const Icon(
                     Icons.person,
-                    color: Colors.black,
+                    color: Color(0xFF1E1E1E),
                     size: 60,
                   ),
                 ),
@@ -98,7 +98,7 @@ class _AgeScreenState extends State<AgeScreen> {
                       child: Container(
                         width: 100,
                         height: 3,
-                        color: Colors.deepOrange,
+                        color: Color(0xFF004DFF),
                       ),
                     ),
                     Positioned(
@@ -106,7 +106,7 @@ class _AgeScreenState extends State<AgeScreen> {
                       child: Container(
                         width: 100,
                         height: 3,
-                        color: Colors.deepOrange,
+                        color: Color(0xFF004DFF),
                       ),
                     ),
                   ],
@@ -129,7 +129,7 @@ class _AgeScreenState extends State<AgeScreen> {
                         Navigator.pop(context);
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF9C7B44),
+                        backgroundColor: const Color(0xFF004DFF),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30),
                         ),
@@ -160,8 +160,8 @@ class _AgeScreenState extends State<AgeScreen> {
                             }
                           : null, // disabled if gender not selected
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF9C7B44),
-                        disabledBackgroundColor: Colors.grey.shade700,
+                        backgroundColor: const Color(0xFF004DFF),
+                        disabledBackgroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30),
                         ),

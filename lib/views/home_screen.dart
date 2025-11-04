@@ -11,13 +11,15 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
-  String? _selectedDay;
   String? workoutType;
   bool isLoading = true;
 
   final TextEditingController _dayController = TextEditingController();
   final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
+  int? selectedDayIndex;
+
+  final List<String> dummyOutputs = List.generate(7, (index) => "");
 
   @override
   void initState() {
@@ -85,115 +87,6 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
-  void _showDaySelectionSheet() {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.transparent,
-      isScrollControlled: true,
-      builder: (context) {
-        return DraggableScrollableSheet(
-          initialChildSize: 0.35,
-          minChildSize: 0.3,
-          maxChildSize: 0.6,
-          expand: false,
-          builder: (context, scrollController) {
-            return Container(
-              padding: const EdgeInsets.all(20),
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
-              ),
-              child: SingleChildScrollView(
-                controller: scrollController,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // Small drag handle
-                    Container(
-                      width: 50,
-                      height: 5,
-                      margin: const EdgeInsets.only(bottom: 15),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    Center(
-                      child: Text(
-                        "Select Your Day",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blueAccent,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-
-                    //Day selection buttons
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: 7,
-                      itemBuilder: (context, index) {
-                        final day = "${index + 1}";
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 6.0),
-                          child: GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                _selectedDay = day;
-                              });
-                              Navigator.pop(context);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text("$day recorded successfully!"),
-                                ),
-                              );
-                            },
-                            child: Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 14,
-                                horizontal: 20,
-                              ),
-                              decoration: BoxDecoration(
-                                color: _selectedDay == day
-                                    ? Colors.blueAccent
-                                    : Colors.grey[200],
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                              child: Text(
-                                day,
-                                style: TextStyle(
-                                  color: _selectedDay == day
-                                      ? Colors.white
-                                      : Colors.black,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-
-                    const SizedBox(height: 10),
-                    const Text(
-                      "You can select from Day 1 to Day 7",
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -233,48 +126,44 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               const SizedBox(height: 25),
+              Container(
+                height: 160,
+                width: double.infinity,
 
-              GestureDetector(
-                onTap: _showDaySelectionSheet,
-                child: Container(
-                  height: 160,
-                  width: double.infinity,
-
-                  decoration: BoxDecoration(
-                    color: Colors.blueAccent,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.all(16.0),
-                    child: Center(
-                      child: isLoading
-                          ? const CircularProgressIndicator(color: Colors.white)
-                          : Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Your Workout Type",
-                                  style: TextStyle(
-                                    color: Color.fromARGB(254, 255, 255, 255),
-                                    fontSize: 24,
-                                    fontStyle: FontStyle.italic,
-                                  ),
+                decoration: BoxDecoration(
+                  color: Colors.blueAccent,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Center(
+                    child: isLoading
+                        ? const CircularProgressIndicator(color: Colors.white)
+                        : Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Your Workout Type",
+                                style: TextStyle(
+                                  color: Color.fromARGB(254, 255, 255, 255),
+                                  fontSize: 24,
+                                  fontStyle: FontStyle.italic,
                                 ),
+                              ),
 
-                                const SizedBox(height: 10),
-                                Text(
-                                  workoutType ?? " Not available yet",
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                              const SizedBox(height: 10),
+                              Text(
+                                workoutType ?? " Not available yet",
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
                                 ),
-                              ],
-                            ),
-                    ),
+                              ),
+                            ],
+                          ),
                   ),
                 ),
               ),
@@ -286,16 +175,111 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
 
               const SizedBox(height: 30),
-
-              // Full Body Strength
-              Container(
-                height: 350,
-                decoration: BoxDecoration(
-                  color: Colors.lightBlue[200],
-                  borderRadius: BorderRadius.circular(20),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: List.generate(7, (index) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 6.0),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            selectedDayIndex = index;
+                          });
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: selectedDayIndex == index
+                              ? Colors.blueAccent
+                              : Colors.white,
+                          foregroundColor: selectedDayIndex == index
+                              ? Colors.white
+                              : Colors.black,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                            side: const BorderSide(color: Colors.blueAccent),
+                          ),
+                          elevation: 4,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 18,
+                            vertical: 14,
+                          ),
+                        ),
+                        child: Text(
+                          "Day ${index + 1}",
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    );
+                  }),
                 ),
               ),
-              const SizedBox(height: 8),
+
+              const SizedBox(height: 20),
+              Expanded(
+                child: Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 4),
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Color(0xFFB1C8FF),
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 6,
+                        offset: Offset(0, 3),
+                      ),
+                    ],
+                  ),
+
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 450),
+                    transitionBuilder: (child, animation) {
+                      final fadeAnim = CurvedAnimation(
+                        parent: animation,
+                        curve: Curves.easeInOut,
+                      );
+                      final slideAnim = Tween<Offset>(
+                        begin: const Offset(0.2, 0.0),
+                        end: Offset.zero,
+                      ).animate(fadeAnim);
+
+                      return FadeTransition(
+                        opacity: fadeAnim,
+                        child: SlideTransition(
+                          position: slideAnim,
+                          child: child,
+                        ),
+                      );
+                    },
+                    child: selectedDayIndex == null
+                        ? const Center(
+                            key: ValueKey('tagline'),
+                            child: Text(
+                              "Select a day to view your workout plan!",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.black54,
+                              ),
+                            ),
+                          )
+                        : SingleChildScrollView(
+                            key: ValueKey<int>(selectedDayIndex!),
+                            child: Text(
+                              dummyOutputs[selectedDayIndex!],
+                              textAlign: TextAlign.left,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 40),
             ],
           ),
         ),
