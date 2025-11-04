@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
+import 'dart:convert';
+import '/controllers/api2_controller.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -12,14 +15,15 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   String? workoutType;
+  String? fitnessLevel;
   bool isLoading = true;
+  int? selectedDayIndex;
 
   final TextEditingController _dayController = TextEditingController();
   final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
-  int? selectedDayIndex;
 
-  final List<String> dummyOutputs = List.generate(7, (index) => "");
+  final Api2Controller api2controller = Get.put(Api2Controller());
 
   @override
   void initState() {
@@ -42,6 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
       if (doc.exists && doc.data() != null) {
         setState(() {
           workoutType = doc['workout_type'];
+          fitnessLevel = doc['fitness_level'];
           isLoading = false;
         });
 
@@ -79,12 +84,6 @@ class _HomeScreenState extends State<HomeScreen> {
         behavior: SnackBarBehavior.floating,
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _dayController.dispose();
-    super.dispose();
   }
 
   @override
@@ -182,10 +181,21 @@ class _HomeScreenState extends State<HomeScreen> {
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 6.0),
                       child: ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async {
                           setState(() {
                             selectedDayIndex = index;
                           });
+                          final user = _auth.currentUser;
+                          if (user != null &&
+                              workoutType != null &&
+                              fitnessLevel != null) {
+                            await api2controller.fetchDayPlan(
+                              user.uid,
+                              index + 1,
+                            );
+                          } else {
+                            showSnackBar("Missing data. Try again.");
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: selectedDayIndex == index
@@ -215,12 +225,13 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
 
               const SizedBox(height: 20),
+              // boxes
               Expanded(
                 child: Container(
                   margin: const EdgeInsets.symmetric(horizontal: 4),
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: Color(0xFFB1C8FF),
+                    color: const Color(0xFFB1C8FF),
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: const [
                       BoxShadow(
@@ -230,56 +241,60 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ],
                   ),
+                  child: Obx(() {
+                    return AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 400),
+                      transitionBuilder: (child, animation) {
+                        final fadeAnim = CurvedAnimation(
+                          parent: animation,
+                          curve: Curves.easeInOut,
+                        );
+                        final slideAnim = Tween<Offset>(
+                          begin: const Offset(0.1, 0.0),
+                          end: Offset.zero,
+                        ).animate(fadeAnim);
 
-                  child: AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 450),
-                    transitionBuilder: (child, animation) {
-                      final fadeAnim = CurvedAnimation(
-                        parent: animation,
-                        curve: Curves.easeInOut,
-                      );
-                      final slideAnim = Tween<Offset>(
-                        begin: const Offset(0.2, 0.0),
-                        end: Offset.zero,
-                      ).animate(fadeAnim);
-
-                      return FadeTransition(
-                        opacity: fadeAnim,
-                        child: SlideTransition(
-                          position: slideAnim,
-                          child: child,
-                        ),
-                      );
-                    },
-                    child: selectedDayIndex == null
-                        ? const Center(
-                            key: ValueKey('tagline'),
-                            child: Text(
-                              "Select a day to view your workout plan!",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.black54,
-                              ),
-                            ),
-                          )
-                        : SingleChildScrollView(
-                            key: ValueKey<int>(selectedDayIndex!),
-                            child: Text(
-                              dummyOutputs[selectedDayIndex!],
-                              textAlign: TextAlign.left,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
+                        return FadeTransition(
+                          opacity: fadeAnim,
+                          child: SlideTransition(
+                            position: slideAnim,
+                            child: child,
                           ),
-                  ),
+                        );
+                      },
+                      child: api2controller.isLoading.value
+                          ? const Center(
+                              key: ValueKey('loading'),
+                              child: CircularProgressIndicator(),
+                            )
+                          : api2controller.plan.isEmpty
+                          ? const Center(
+                              key: ValueKey('empty'),
+                              child: Text(
+                                "Select a day to view your workout plan!",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.black54,
+                                ),
+                              ),
+                            )
+                          : SingleChildScrollView(
+                              key: ValueKey(api2controller.plan),
+                              child: Text(
+                                api2controller.plan,
+                                textAlign: TextAlign.left,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                    );
+                  }),
                 ),
               ),
-
-              const SizedBox(height: 40),
             ],
           ),
         ),
