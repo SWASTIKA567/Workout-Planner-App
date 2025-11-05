@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:workout_planner/views/Gender_screen.dart';
+import 'package:workout_planner/views/home_screen.dart';
 import '../login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -32,7 +33,7 @@ class _SplashScreenState extends State<SplashScreen> {
         // ✅ Navigate safely after build
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const GenderScreen()),
+          MaterialPageRoute(builder: (context) => HomeScreen()),
         );
       } else {
         Navigator.pushReplacement(

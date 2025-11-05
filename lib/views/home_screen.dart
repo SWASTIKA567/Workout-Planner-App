@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -19,7 +21,6 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isLoading = true;
   int? selectedDayIndex;
 
-  final TextEditingController _dayController = TextEditingController();
   final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
 
@@ -42,13 +43,14 @@ class _HomeScreenState extends State<HomeScreen> {
       }
 
       final doc = await _firestore.collection('users').doc(user.uid).get();
-
       if (doc.exists && doc.data() != null) {
+        final data = doc.data() as Map<String, dynamic>;
         setState(() {
           workoutType = doc['workout_type'];
-          fitnessLevel = doc['fitness_level'];
+          fitnessLevel = doc['inputs']['fitness_level'];
           isLoading = false;
         });
+        print("Fetched data -> Type: $workoutType | Level : $fitnessLevel");
 
         showSnackBar("Workout data fetched successfully ");
       } else {
@@ -191,6 +193,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               fitnessLevel != null) {
                             await api2controller.fetchDayPlan(
                               user.uid,
+                              fitnessLevel!,
+                              workoutType!,
                               index + 1,
                             );
                           } else {
@@ -282,13 +286,21 @@ class _HomeScreenState extends State<HomeScreen> {
                             )
                           : SingleChildScrollView(
                               key: ValueKey(api2controller.plan),
-                              child: Text(
-                                api2controller.plan,
-                                textAlign: TextAlign.left,
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: api2controller.plan.map((exercise) {
+                                  return Padding(
+                                    padding: const EdgeInsets.only(bottom: 8.0),
+                                    child: Text(
+                                      "${exercise['exercise_name']} - ${exercise['reps']} reps × ${exercise['sets']} sets",
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.black87,
+                                      ),
+                                    ),
+                                  );
+                                }).toList(),
                               ),
                             ),
                     );

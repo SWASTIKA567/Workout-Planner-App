@@ -8,6 +8,7 @@ import 'views/splash_screen.dart';
 import 'login_screen.dart';
 import 'register_screen.dart';
 import 'views/home_screen.dart';
+import 'package:get/get.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,7 +20,7 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'WORKOUT APP',
       debugShowCheckedModeBanner: false,
 
