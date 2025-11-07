@@ -230,82 +230,134 @@ class _HomeScreenState extends State<HomeScreen> {
 
               const SizedBox(height: 20),
               // boxes
-              Expanded(
-                child: Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 4),
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFB1C8FF),
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Colors.black26,
-                        blurRadius: 6,
-                        offset: Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                  child: Obx(() {
-                    return AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 400),
-                      transitionBuilder: (child, animation) {
-                        final fadeAnim = CurvedAnimation(
-                          parent: animation,
-                          curve: Curves.easeInOut,
-                        );
-                        final slideAnim = Tween<Offset>(
-                          begin: const Offset(0.1, 0.0),
-                          end: Offset.zero,
-                        ).animate(fadeAnim);
+              Container(
+                width: double.infinity,
+                margin: const EdgeInsets.symmetric(horizontal: 4),
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFB1C8FF),
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 6,
+                      offset: Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: Obx(() {
+                  return AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 400),
+                    transitionBuilder: (child, animation) {
+                      final fadeAnim = CurvedAnimation(
+                        parent: animation,
+                        curve: Curves.easeInOut,
+                      );
+                      final slideAnim = Tween<Offset>(
+                        begin: const Offset(0.1, 0.0),
+                        end: Offset.zero,
+                      ).animate(fadeAnim);
 
-                        return FadeTransition(
-                          opacity: fadeAnim,
-                          child: SlideTransition(
-                            position: slideAnim,
-                            child: child,
-                          ),
-                        );
-                      },
-                      child: api2controller.isLoading.value
-                          ? const Center(
-                              key: ValueKey('loading'),
-                              child: CircularProgressIndicator(),
-                            )
-                          : api2controller.plan.isEmpty
-                          ? const Center(
-                              key: ValueKey('empty'),
-                              child: Text(
-                                "Select a day to view your workout plan!",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.black54,
-                                ),
-                              ),
-                            )
-                          : SingleChildScrollView(
-                              key: ValueKey(api2controller.plan),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: api2controller.plan.map((exercise) {
-                                  return Padding(
-                                    padding: const EdgeInsets.only(bottom: 8.0),
-                                    child: Text(
-                                      "${exercise['exercise_name']} - ${exercise['reps']} reps × ${exercise['sets']} sets",
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w500,
-                                        color: Colors.black87,
-                                      ),
-                                    ),
-                                  );
-                                }).toList(),
+                      return FadeTransition(
+                        opacity: fadeAnim,
+                        child: SlideTransition(
+                          position: slideAnim,
+                          child: child,
+                        ),
+                      );
+                    },
+                    child: api2controller.isLoading.value
+                        ? const Center(
+                            key: ValueKey('loading'),
+                            child: CircularProgressIndicator(),
+                          )
+                        : api2controller.plan.isEmpty
+                        ? const Center(
+                            key: ValueKey('empty'),
+                            child: Text(
+                              "Select a day to view your workout plan!",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.black54,
                               ),
                             ),
-                    );
-                  }),
-                ),
+                          )
+                        : SingleChildScrollView(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: api2controller.plan.asMap().entries.map((
+                                entry,
+                              ) {
+                                final index = entry.key;
+                                final exercise = entry.value;
+                                final hasSetsAndReps =
+                                    exercise['sets'] != null &&
+                                    exercise['reps'] != null;
+                                final hasDuration =
+                                    exercise['duration_sec'] != null;
+                                final colors = [
+                                  Colors.blue.shade200,
+                                  Color(0xFF004DFF),
+                                  Color(0xFF759EFF),
+                                ];
+                                final cardColor = colors[index % colors.length];
+
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 16,
+                                    vertical: 8,
+                                  ),
+                                  child: Card(
+                                    color: cardColor,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: Container(
+                                      height: 90,
+                                      width: double.infinity,
+                                      padding: const EdgeInsets.all(16.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "${index + 1}. ${exercise['exercise_name']}",
+                                            style: const TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black87,
+                                            ),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                          const SizedBox(height: 6),
+                                          Text(
+                                            hasSetsAndReps
+                                                ? "${exercise['reps']} reps × ${exercise['sets']} sets"
+                                                : "Duration  : ${exercise['duration_sec']} sec",
+                                            style: const TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.normal,
+                                              color: Colors.black54,
+                                            ),
+                                            maxLines: 1,
+                                            overflow: TextOverflow
+                                                .ellipsis, // prevent stretching
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                  );
+                }),
               ),
             ],
           ),

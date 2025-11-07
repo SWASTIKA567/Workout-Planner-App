@@ -65,7 +65,7 @@ class _GenderScreenState extends State<GenderScreen> {
                   ),
                   const SizedBox(height: 70),
 
-                  // --- Gender Buttons ---
+                  // Gender Buttons
                   Column(
                     children: [
                       genderButton("Female", "assets/female.svg"),
@@ -74,7 +74,7 @@ class _GenderScreenState extends State<GenderScreen> {
                     ],
                   ),
                   const SizedBox(height: 130),
-                  // --- Bottom Buttons ---
+                  //Bottom Buttons
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
