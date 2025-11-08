@@ -167,7 +167,7 @@ class _HeightScreenState extends State<HeightScreen> {
                                 ),
                               );
                             }
-                          : null, // disabled if gender not selected
+                          : null,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF9C7B44),
                         disabledBackgroundColor: Colors.grey.shade700,

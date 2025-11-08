@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:workout_planner/views/library_screen.dart';
 import 'dart:convert';
 import '/controllers/api2_controller.dart';
+import 'choice_screen.dart';
+import 'profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -345,8 +348,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               color: Colors.black54,
                                             ),
                                             maxLines: 1,
-                                            overflow: TextOverflow
-                                                .ellipsis, // prevent stretching
+                                            overflow: TextOverflow.ellipsis,
                                           ),
                                         ],
                                       ),
@@ -391,6 +393,28 @@ class _HomeScreenState extends State<HomeScreen> {
             setState(() {
               _selectedIndex = index;
             });
+
+            if (index == 0) {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const HomeScreen()),
+              );
+            } else if (index == 1) {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => LibraryScreen()),
+              );
+            } else if (index == 2) {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const ChoiceScreen()),
+              );
+            } else if (index == 3) {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const ProfileScreen()),
+              );
+            }
           },
           items: const [
             BottomNavigationBarItem(
@@ -403,7 +427,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.restaurant_menu_rounded),
-              label: 'Progress',
+              label: 'Diet',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.person_rounded),

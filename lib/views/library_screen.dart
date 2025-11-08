@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'home_screen.dart';
 
 void main() {
   runApp(MaterialApp(debugShowCheckedModeBanner: false, home: LibraryScreen()));
@@ -36,7 +37,12 @@ class LibraryScreen extends StatelessWidget {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      Navigator.pop(context);
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const HomeScreen(),
+                        ),
+                      );
                     },
                     child: Container(
                       height: 40,
