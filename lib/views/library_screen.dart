@@ -17,10 +17,10 @@ class LibraryScreen extends StatelessWidget {
 
   final List<Color> colors = [
     Color(0xFF004DFF),
-    Color.fromARGB(255, 70, 119, 233),
+    Color.fromARGB(255, 56, 110, 236),
     Color(0xFF759EFF),
     Color(0XFFB1C8FF),
-    Color(0xFFDBE4FF),
+    Color.fromARGB(255, 97, 133, 239),
   ];
 
   @override

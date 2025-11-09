@@ -42,63 +42,66 @@ class _ChoiceScreenState extends State<ChoiceScreen> {
                       ),
                     ],
                   ),
-                  padding: const EdgeInsets.all(8),
+                  padding: const EdgeInsets.all(4),
                   child: const Icon(Icons.arrow_back, size: 24),
                 ),
               ),
 
-              const SizedBox(height: 70),
+              const SizedBox(height: 30),
 
-              const Center(
+              Center(
                 child: Text(
                   "Choose your food preferences",
                   style: TextStyle(
-                    fontSize: 33,
+                    fontSize: 29,
                     fontWeight: FontWeight.w600,
                     letterSpacing: 0.5,
                   ),
                 ),
               ),
 
-              const SizedBox(height: 60),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _buildPreferenceBox(
-                    context,
-                    title: "Vegetarian",
-                    imagePath: "assets/veg.jpeg",
-                    scale: _scale1,
-                    onTapDown: () => setState(() => _scale1 = 1.05),
-                    onTapUp: () => setState(() => _scale1 = 1.0),
-                    onTap: () {
-                      Navigator.push(
+              const SizedBox(height: 10),
+              Expanded(
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _buildPreferenceBox(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => const DietScreen(),
-                        ),
-                      );
-                    },
-                  ),
-                  const SizedBox(width: 3),
-                  _buildPreferenceBox(
-                    context,
-                    title: "Non-Vegetarian",
-                    imagePath: "assets/non veg.webp",
-                    scale: _scale2,
-                    onTapDown: () => setState(() => _scale2 = 1.05),
-                    onTapUp: () => setState(() => _scale2 = 1.0),
-                    onTap: () {
-                      Navigator.push(
+                        title: "Vegetarian",
+                        imagePath: "assets/veg.jpeg",
+                        scale: _scale1,
+                        onTapDown: () => setState(() => _scale1 = 1.05),
+                        onTapUp: () => setState(() => _scale1 = 1.0),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const DietScreen(),
+                            ),
+                          );
+                        },
+                      ),
+                      const SizedBox(height: 40),
+                      _buildPreferenceBox(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => const DietScreen(),
-                        ),
-                      );
-                    },
+                        title: "Non-Vegetarian",
+                        imagePath: "assets/non veg.webp",
+                        scale: _scale2,
+                        onTapDown: () => setState(() => _scale2 = 1.05),
+                        onTapUp: () => setState(() => _scale2 = 1.0),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const DietScreen(),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ],
           ),
@@ -126,8 +129,8 @@ class _ChoiceScreenState extends State<ChoiceScreen> {
         duration: const Duration(milliseconds: 150),
         curve: Curves.easeOut,
         child: Container(
-          height: 180,
-          width: 150,
+          height: 250,
+          width: 250,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             image: DecorationImage(
@@ -151,8 +154,8 @@ class _ChoiceScreenState extends State<ChoiceScreen> {
             title,
             style: const TextStyle(
               color: Colors.white,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
+              fontSize: 23,
+              fontWeight: FontWeight.w800,
               letterSpacing: 1.0,
             ),
           ),
