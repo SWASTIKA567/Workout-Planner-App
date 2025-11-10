@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'diet_screen.dart';
 import 'home_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class ChoiceScreen extends StatefulWidget {
   const ChoiceScreen({super.key});
@@ -12,6 +13,8 @@ class ChoiceScreen extends StatefulWidget {
 class _ChoiceScreenState extends State<ChoiceScreen> {
   double _scale1 = 1.0;
   double _scale2 = 1.0;
+
+  String get currentUserId => FirebaseAuth.instance.currentUser!.uid;
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +80,8 @@ class _ChoiceScreenState extends State<ChoiceScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const DietScreen(),
+                              builder: (context) =>
+                                  DietScreen(userId: currentUserId),
                             ),
                           );
                         },
@@ -94,7 +98,8 @@ class _ChoiceScreenState extends State<ChoiceScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const DietScreen(),
+                              builder: (context) =>
+                                  DietScreen(userId: currentUserId),
                             ),
                           );
                         },

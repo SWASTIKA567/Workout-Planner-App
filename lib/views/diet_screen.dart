@@ -1,8 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:workout_planner/controllers/diet_controller.dart';
 import 'home_screen.dart';
 
-class DietScreen extends StatelessWidget {
-  const DietScreen({Key? key}) : super(key: key);
+class DietScreen extends StatefulWidget {
+  final String userId;
+  const DietScreen({Key? key, required this.userId}) : super(key: key);
+
+  @override
+  State<DietScreen> createState() => _DietScreenState();
+}
+
+class _DietScreenState extends State<DietScreen> {
+  final DietController controller = Get.put(DietController());
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.fetchDietData(widget.userId);
+    });
+  }
 
   Widget buildSmallBox({
     required String title,
@@ -48,138 +66,146 @@ class DietScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xFFF6F7FB),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const HomeScreen(),
-                          ),
-                        );
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.all(8),
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black12,
-                              blurRadius: 6,
-                              offset: Offset(0, 3),
-                            ),
-                          ],
-                        ),
-                        child: const Icon(
-                          Icons.arrow_back,
-                          color: Colors.black87,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    const Text(
-                      "Diet",
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
+        child: Obx(() {
+          if (controller.isLoading.value) {
+            return const Center(child: CircularProgressIndicator());
+          }
 
-                const SizedBox(height: 24),
-
-                const Text(
-                  "Daily Breakdown",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-
-                const SizedBox(height: 16),
-
-                GridView.count(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 14,
-                  crossAxisSpacing: 14,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  children: [
-                    buildSmallBox(
-                      title: "Calories",
-                      value: "1850 kcal",
-                      color: Color(0xFF759EFF),
-                    ),
-                    buildSmallBox(
-                      title: "Carbs",
-                      value: "230 g",
-                      color: Colors.blue.shade400,
-                    ),
-                    buildSmallBox(
-                      title: "Protein",
-                      value: "95 g",
-                      color: Color(0xFFB1C8FF),
-                    ),
-                    buildSmallBox(
-                      title: "Fat",
-                      value: "60 g",
-                      color: Color(0xFFDBE4FF),
-                    ),
-                  ],
-                ),
-
-                const SizedBox(height: 24),
-
-                // Big container below
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: Colors.teal.shade400,
-                    borderRadius: BorderRadius.circular(18),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Colors.black26,
-                        blurRadius: 6,
-                        offset: Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                  child: const Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
                     children: [
-                      Text(
-                        "Today's Plan",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const HomeScreen(),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black12,
+                                blurRadius: 6,
+                                offset: Offset(0, 3),
+                              ),
+                            ],
+                          ),
+                          child: const Icon(
+                            Icons.arrow_back,
+                            color: Colors.black87,
+                          ),
                         ),
                       ),
-                      SizedBox(height: 12),
-                      Text(
-                        "Breakfast: Oats + 2 Eggs\n"
-                        "Lunch: Rice + Chicken + Salad\n"
-                        "Dinner: Quinoa + Veggies",
+                      const SizedBox(width: 12),
+                      const Text(
+                        "Diet",
                         style: TextStyle(
-                          fontSize: 20,
-                          height: 3.5,
-                          color: Colors.white,
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ],
                   ),
-                ),
-              ],
+
+                  const SizedBox(height: 24),
+
+                  const Text(
+                    "Daily Breakdown",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+
+                  const SizedBox(height: 16),
+
+                  GridView.count(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 14,
+                    crossAxisSpacing: 14,
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    children: [
+                      buildSmallBox(
+                        title: "Calories",
+                        value:
+                            "${controller.calories.value.toStringAsFixed(0)} kcal",
+                        color: Color(0xFF759EFF),
+                      ),
+                      buildSmallBox(
+                        title: "Carbs",
+                        value: "${controller.carbs.value.toStringAsFixed(0)} g",
+                        color: Colors.blue.shade400,
+                      ),
+                      buildSmallBox(
+                        title: "Protein",
+                        value:
+                            "${controller.protein.value.toStringAsFixed(0)} g",
+                        color: Color(0xFFB1C8FF),
+                      ),
+                      buildSmallBox(
+                        title: "Fat",
+                        value: "${controller.fat.value.toStringAsFixed(0)} g",
+                        color: Color(0xFFDBE4FF),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 24),
+
+                  // Big container below
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: Colors.teal.shade400,
+                      borderRadius: BorderRadius.circular(18),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.black26,
+                          blurRadius: 6,
+                          offset: Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: const Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Today's Plan",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                        SizedBox(height: 12),
+                        Text(
+                          "Breakfast: Oats + 2 Eggs\n"
+                          "Lunch: Rice + Chicken + Salad\n"
+                          "Dinner: Quinoa + Veggies",
+                          style: TextStyle(
+                            fontSize: 20,
+                            height: 3.5,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ),
+          );
+        }),
       ),
     );
   }
