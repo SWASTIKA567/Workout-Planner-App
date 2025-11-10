@@ -30,40 +30,4 @@ class FirestoreService {
       print("Error saving plan: $e");
     }
   }
-
-  //  FETCH: User Inputs
-  Future<Map<String, dynamic>?> getUserInputs(String userId) async {
-    try {
-      final doc = await _firestore.collection('users').doc(userId).get();
-      if (doc.exists) {
-        final data = doc.data();
-        if (data != null && data['inputs'] != null) {
-          log("Found user inputs : ${data['inputs']}");
-          return data['inputs'] as Map<String, dynamic>;
-        } else {
-          log(" 'inputs' feild missing in user doc for $userId ");
-        }
-      } else {
-        log("No user document found for $userId");
-      }
-    } catch (e) {
-      log(" Error getting user inputs: $e");
-    }
-    return null;
-  }
-
-  // SAVE: Diet Data
-  Future<void> saveDietData(
-    String userId,
-    Map<String, dynamic> dietData,
-  ) async {
-    try {
-      await _firestore.collection('users').doc(userId).set({
-        'diet_data': dietData,
-      }, SetOptions(merge: true));
-      log("Diet data saved successfully for $userId");
-    } catch (e) {
-      log("Error saving diet data: $e");
-    }
-  }
 }

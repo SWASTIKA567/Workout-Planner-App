@@ -29,6 +29,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final Api2Controller api2controller = Get.put(Api2Controller());
 
+  void showSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message), duration: const Duration(seconds: 2)),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -66,47 +72,11 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  Future<void> _logout() async {
-    try {
-      await _auth.signOut();
-      if (mounted) {
-        Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Logged out successfully')),
-        );
-      }
-    } catch (e) {
-      showSnackBar("Error logging out: $e");
-    }
-  }
-
-  void showSnackBar(String message) {
-    if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: Colors.blueAccent,
-        behavior: SnackBarBehavior.floating,
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[100],
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.blueAccent,
-        title: const Text("Home"),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: _logout,
-            tooltip: 'Logout',
-          ),
-        ],
-      ),
+
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -115,19 +85,31 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               const SizedBox(height: 10),
               const Text(
-                "Hello ",
+                "Hello, ",
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 30),
-              Center(
-                child: Text(
-                  "Today's Workout Plan",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.black87,
-                  ),
+              const SizedBox(height: 10),
+              const Text(
+                "Let's have a productive workout day!",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blueGrey,
                 ),
+              ),
+              const SizedBox(height: 50),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Today's Workout Plan",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.black87,
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 25),
               Container(
@@ -144,26 +126,32 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: isLoading
                         ? const CircularProgressIndicator(color: Colors.white)
                         : Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.start,
+
                             children: [
                               Text(
                                 "Your Workout Type",
+                                textAlign: TextAlign.center,
                                 style: TextStyle(
-                                  color: Color.fromARGB(254, 255, 255, 255),
-                                  fontSize: 24,
-                                  fontStyle: FontStyle.italic,
+                                  color: Color.fromARGB(234, 6, 0, 0),
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.normal,
                                 ),
                               ),
 
                               const SizedBox(height: 10),
-                              Text(
-                                workoutType ?? " Not available yet",
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
+                              Center(
+                                child: Text(
+                                  workoutType ?? " Not available yet",
+                                  textAlign: TextAlign.center,
+
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                    fontStyle: FontStyle.italic,
+                                  ),
                                 ),
                               ),
                             ],
@@ -194,6 +182,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           if (user != null &&
                               workoutType != null &&
                               fitnessLevel != null) {
+                            await _firestore
+                                .collection('users')
+                                .doc(user.uid)
+                                .update({'workout_plans.day_index': index + 1});
                             await api2controller.fetchDayPlan(
                               user.uid,
                               fitnessLevel!,

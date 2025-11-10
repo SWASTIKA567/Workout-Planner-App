@@ -1,27 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:workout_planner/controllers/diet_controller.dart';
 import 'home_screen.dart';
 
-class DietScreen extends StatefulWidget {
-  final String userId;
-  const DietScreen({Key? key, required this.userId}) : super(key: key);
-
-  @override
-  State<DietScreen> createState() => _DietScreenState();
-}
-
-class _DietScreenState extends State<DietScreen> {
-  final DietController controller = Get.put(DietController());
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      controller.fetchDietData(widget.userId);
-    });
-  }
-
+class DietScreen extends StatelessWidget {
+  const DietScreen({super.key, required String userId});
   Widget buildSmallBox({
     required String title,
     required String value,
@@ -63,6 +47,12 @@ class _DietScreenState extends State<DietScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null)
+      return const Scaffold(body: Center(child: Text("User not logged in")));
+
+    final controller = Get.put(DietController(userId: user.uid));
+
     return Scaffold(
       backgroundColor: const Color(0xFFF6F7FB),
       body: SafeArea(
@@ -137,23 +127,24 @@ class _DietScreenState extends State<DietScreen> {
                       buildSmallBox(
                         title: "Calories",
                         value:
-                            "${controller.calories.value.toStringAsFixed(0)} kcal",
+                            "${controller.caloriesKcal.value.toStringAsFixed(0)} kcal",
                         color: Color(0xFF759EFF),
                       ),
                       buildSmallBox(
                         title: "Carbs",
-                        value: "${controller.carbs.value.toStringAsFixed(0)} g",
+                        value:
+                            "${controller.carbsG.value.toStringAsFixed(0)} g",
                         color: Colors.blue.shade400,
                       ),
                       buildSmallBox(
                         title: "Protein",
                         value:
-                            "${controller.protein.value.toStringAsFixed(0)} g",
+                            "${controller.proteinG.value.toStringAsFixed(0)} g",
                         color: Color(0xFFB1C8FF),
                       ),
                       buildSmallBox(
                         title: "Fat",
-                        value: "${controller.fat.value.toStringAsFixed(0)} g",
+                        value: "${controller.fatsG.value.toStringAsFixed(0)} g",
                         color: Color(0xFFDBE4FF),
                       ),
                     ],
