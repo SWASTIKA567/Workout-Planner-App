@@ -16,23 +16,24 @@ class LibraryScreen extends StatelessWidget {
   ];
 
   final List<Color> colors = [
-    Color(0xFF004DFF),
-    Color.fromARGB(255, 56, 110, 236),
-    Color(0xFF759EFF),
     Color(0XFFB1C8FF),
+    Color(0xFF759EFF),
+    Color.fromARGB(255, 56, 110, 236),
+    Color(0xFF004DFF),
+
     Color.fromARGB(255, 97, 133, 239),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFDBE4FF),
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(23),
               child: Row(
                 children: [
                   GestureDetector(
@@ -46,7 +47,7 @@ class LibraryScreen extends StatelessWidget {
                     },
                     child: Container(
                       height: 40,
-                      width: 40,
+                      width: 20,
                       decoration: BoxDecoration(
                         color: Color(0xFFDBE4FF),
                         shape: BoxShape.circle,
@@ -65,16 +66,16 @@ class LibraryScreen extends StatelessWidget {
 
             Expanded(
               child: ListView.builder(
-                padding: EdgeInsets.all(10),
+                padding: EdgeInsets.all(20),
                 itemCount: texts.length,
                 itemBuilder: (context, index) {
                   return Container(
-                    height: 150,
+                    height: 200,
                     width: double.infinity,
-                    margin: EdgeInsets.only(bottom: 10),
+                    margin: EdgeInsets.only(bottom: 30),
                     decoration: BoxDecoration(
                       color: colors[index],
-                      borderRadius: BorderRadius.circular(15),
+                      borderRadius: BorderRadius.circular(20),
                     ),
                     child: Center(
                       child: Text(
@@ -82,7 +83,7 @@ class LibraryScreen extends StatelessWidget {
 
                         textAlign: TextAlign.left,
                         style: TextStyle(
-                          color: Colors.white,
+                          color: Colors.black,
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),

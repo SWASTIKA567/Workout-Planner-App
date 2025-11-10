@@ -50,16 +50,28 @@ class _ChoiceScreenState extends State<ChoiceScreen> {
                 ),
               ),
 
-              const SizedBox(height: 30),
+              const SizedBox(height: 10),
 
               Center(
-                child: Text(
-                  "Choose your food preferences",
-                  style: TextStyle(
-                    fontSize: 29,
-                    fontWeight: FontWeight.w600,
-                    letterSpacing: 0.5,
-                  ),
+                child: Column(
+                  children: [
+                    Text(
+                      "Diet & Nutrition",
+                      style: TextStyle(
+                        fontSize: 29,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                    Text(
+                      "Choose your food preferences",
+                      style: TextStyle(
+                        fontSize: 23,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                  ],
                 ),
               ),
 
@@ -134,8 +146,8 @@ class _ChoiceScreenState extends State<ChoiceScreen> {
         duration: const Duration(milliseconds: 150),
         curve: Curves.easeOut,
         child: Container(
-          height: 250,
-          width: 250,
+          height: 220,
+          width: 370,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             image: DecorationImage(
@@ -148,19 +160,19 @@ class _ChoiceScreenState extends State<ChoiceScreen> {
             ),
             boxShadow: [
               BoxShadow(
-                color: Colors.grey.withOpacity(0.4),
-                blurRadius: 8,
+                color: Colors.black.withOpacity(0.4),
+                blurRadius: 10,
                 offset: const Offset(0, 5),
               ),
             ],
           ),
-          alignment: Alignment.center,
+          alignment: Alignment.centerLeft,
           child: Text(
             title,
             style: const TextStyle(
-              color: Colors.white,
-              fontSize: 23,
-              fontWeight: FontWeight.w800,
+              color: Colors.black,
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
               letterSpacing: 1.0,
             ),
           ),
