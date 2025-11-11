@@ -19,7 +19,7 @@ class _WeightScreenState extends State<WeightScreen> {
   Widget build(BuildContext context) {
     print('Gender: ${widget.gender}, Age : ${widget.age}');
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Stack(
           children: [
@@ -30,7 +30,7 @@ class _WeightScreenState extends State<WeightScreen> {
                 const Text(
                   "What Is Your Weight?",
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Colors.black,
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                   ),
@@ -38,7 +38,7 @@ class _WeightScreenState extends State<WeightScreen> {
                 const SizedBox(height: 8),
                 const Text(
                   "This helps us Create your personalised plan",
-                  style: TextStyle(color: Colors.grey, fontSize: 16),
+                  style: TextStyle(color: Colors.black, fontSize: 16),
                 ),
                 const SizedBox(height: 60),
 
@@ -80,7 +80,7 @@ class _WeightScreenState extends State<WeightScreen> {
                                 '$weight kg',
                                 style: TextStyle(
                                   color: isSelected
-                                      ? Colors.white
+                                      ? Colors.black
                                       : Colors.grey,
                                   fontSize: isSelected ? 38 : 36,
                                   fontWeight: isSelected
@@ -100,7 +100,7 @@ class _WeightScreenState extends State<WeightScreen> {
                       child: Container(
                         width: 100,
                         height: 3,
-                        color: Colors.deepOrange,
+                        color: Color(0xFF004DFF),
                       ),
                     ),
                     Positioned(
@@ -108,7 +108,7 @@ class _WeightScreenState extends State<WeightScreen> {
                       child: Container(
                         width: 100,
                         height: 3,
-                        color: Colors.deepOrange,
+                        color: Color(0xFF004DFF),
                       ),
                     ),
                   ],
@@ -131,7 +131,7 @@ class _WeightScreenState extends State<WeightScreen> {
                         Navigator.pop(context);
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF9C7B44),
+                        backgroundColor: const Color(0xFF004DFF),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30),
                         ),
@@ -163,7 +163,7 @@ class _WeightScreenState extends State<WeightScreen> {
                             }
                           : null, // disabled if gender not selected
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF9C7B44),
+                        backgroundColor: const Color(0xFF004DFF),
                         disabledBackgroundColor: Colors.grey.shade700,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30),

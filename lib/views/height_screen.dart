@@ -23,7 +23,7 @@ class _HeightScreenState extends State<HeightScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Stack(
           children: [
@@ -34,7 +34,7 @@ class _HeightScreenState extends State<HeightScreen> {
                 const Text(
                   "What Is Your Height?",
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Colors.black,
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                   ),
@@ -42,7 +42,7 @@ class _HeightScreenState extends State<HeightScreen> {
                 const SizedBox(height: 8),
                 const Text(
                   "This helps us Create your personalised plan",
-                  style: TextStyle(color: Colors.grey, fontSize: 16),
+                  style: TextStyle(color: Colors.black, fontSize: 16),
                 ),
                 const SizedBox(height: 60),
 
@@ -84,7 +84,7 @@ class _HeightScreenState extends State<HeightScreen> {
                                 '$height cm',
                                 style: TextStyle(
                                   color: isSelected
-                                      ? Colors.white
+                                      ? Colors.black
                                       : Colors.grey,
                                   fontSize: isSelected ? 38 : 36,
                                   fontWeight: isSelected
@@ -104,7 +104,7 @@ class _HeightScreenState extends State<HeightScreen> {
                       child: Container(
                         width: 120,
                         height: 3,
-                        color: Colors.deepOrange,
+                        color: Color(0xFF004DFF),
                       ),
                     ),
                     Positioned(
@@ -112,7 +112,7 @@ class _HeightScreenState extends State<HeightScreen> {
                       child: Container(
                         width: 120,
                         height: 3,
-                        color: Colors.deepOrange,
+                        color: Color(0xFF004DFF),
                       ),
                     ),
                   ],
@@ -135,7 +135,7 @@ class _HeightScreenState extends State<HeightScreen> {
                         Navigator.pop(context);
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF9C7B44),
+                        backgroundColor: const Color(0xFF004DFF),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30),
                         ),
@@ -169,7 +169,7 @@ class _HeightScreenState extends State<HeightScreen> {
                             }
                           : null,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF9C7B44),
+                        backgroundColor: Color(0xFF004DFF),
                         disabledBackgroundColor: Colors.grey.shade700,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30),
@@ -182,7 +182,7 @@ class _HeightScreenState extends State<HeightScreen> {
                       icon: const Icon(Icons.arrow_forward_ios, size: 16),
                       label: const Text(
                         "Next",
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.black),
                       ),
                     ),
                   ],

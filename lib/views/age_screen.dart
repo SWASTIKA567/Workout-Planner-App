@@ -17,7 +17,7 @@ class _AgeScreenState extends State<AgeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFB1C8FF),
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Stack(
           children: [
@@ -28,7 +28,7 @@ class _AgeScreenState extends State<AgeScreen> {
                 const Text(
                   "How old are you?",
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Colors.black,
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                   ),
@@ -36,7 +36,7 @@ class _AgeScreenState extends State<AgeScreen> {
                 const SizedBox(height: 8),
                 const Text(
                   "    To provide you with a better\n experience by knowing your age",
-                  style: TextStyle(color: Colors.grey, fontSize: 16),
+                  style: TextStyle(color: Colors.black, fontSize: 16),
                 ),
                 const SizedBox(height: 60),
 
@@ -78,7 +78,7 @@ class _AgeScreenState extends State<AgeScreen> {
                                 '$age',
                                 style: TextStyle(
                                   color: isSelected
-                                      ? Colors.white
+                                      ? Colors.black
                                       : Colors.grey,
                                   fontSize: isSelected ? 38 : 36,
                                   fontWeight: isSelected
@@ -140,7 +140,7 @@ class _AgeScreenState extends State<AgeScreen> {
                       ),
                       icon: const Icon(Icons.arrow_back_ios, size: 16),
                       label: const Text(
-                        "Skip",
+                        "Back",
                         style: TextStyle(color: Colors.white),
                       ),
                     ),

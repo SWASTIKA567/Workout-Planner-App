@@ -11,7 +11,7 @@ class FirestoreService {
       final doc = await _firestore.collection('users').doc(userId).get();
       if (doc.exists) return doc.data() as Map<String, dynamic>;
     } catch (e) {
-      print("Error getting data: $e");
+      log("Error getting data: $e");
     }
     return null;
   }
@@ -27,7 +27,7 @@ class FirestoreService {
         'workout_plans': {'day_$dayIndex': plan},
       }, SetOptions(merge: true));
     } catch (e) {
-      print("Error saving plan: $e");
+      log("Error saving plan: $e");
     }
   }
 }

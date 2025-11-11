@@ -50,11 +50,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
         final inputs = data['inputs'] ?? {};
 
         if (inputs.isEmpty) {
-          showSnackBar("Inputs not found in user document.");
+          showSnackBar("Inputs not found");
         }
 
         setState(() {
-          _nameController.text = user!.displayName ?? '';
           _ageController.text = inputs['age']?.toString() ?? '';
           _genderController.text = inputs['gender'] ?? '';
           _heightController.text = inputs['height_cm']?.toString() ?? '';
@@ -138,7 +137,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Color(0xFFB1C8FF),
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
@@ -181,11 +180,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
             Center(
               child: Text(
                 user?.email ?? "",
-                style: const TextStyle(color: Colors.grey, fontSize: 16),
+                style: const TextStyle(color: Colors.black, fontSize: 16),
               ),
             ),
             const SizedBox(height: 30),
-            _buildTextField("Name", _nameController),
+
             _buildTextField("Age", _ageController),
             _buildTextField("Gender", _genderController),
             _buildTextField("Height (cm)", _heightController),
@@ -205,7 +204,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 icon: const Icon(Icons.save, color: Colors.white),
                 label: const Text("Save Changes"),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
+                  backgroundColor: Colors.blue,
                   minimumSize: const Size(double.infinity, 50),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(25),
@@ -233,16 +232,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _buildTextField(String label, TextEditingController controller) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.symmetric(vertical: 10),
       child: TextField(
         controller: controller,
         enabled: _isEditing,
         decoration: InputDecoration(
           labelText: label,
-          labelStyle: const TextStyle(fontWeight: FontWeight.w500),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
+          labelStyle: const TextStyle(
+            fontWeight: FontWeight.w600,
+            color: Color(0xFF004DFF),
+          ),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
           filled: !_isEditing,
-          fillColor: _isEditing ? Colors.white : Colors.grey.shade100,
+          fillColor: _isEditing ? Colors.white : Colors.white,
         ),
       ),
     );

@@ -59,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
           fitnessLevel = doc['inputs']['fitness_level'];
           isLoading = false;
         });
-        print("Fetched data -> Type: $workoutType | Level : $fitnessLevel");
+        log("Fetched data -> Type: $workoutType | Level : $fitnessLevel");
 
         showSnackBar("Workout data fetched successfully ");
       } else {

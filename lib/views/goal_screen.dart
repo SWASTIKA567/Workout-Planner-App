@@ -32,7 +32,7 @@ class _GoalScreenState extends State<GoalScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Stack(
           children: [
@@ -44,7 +44,7 @@ class _GoalScreenState extends State<GoalScreen> {
                   child: Text(
                     " What's your goal?",
                     style: TextStyle(
-                      color: Colors.white,
+                      color: Colors.black,
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                     ),
@@ -56,7 +56,7 @@ class _GoalScreenState extends State<GoalScreen> {
                 const Center(
                   child: Text(
                     " This helps us Create your personalised plan",
-                    style: TextStyle(color: Colors.grey, fontSize: 16),
+                    style: TextStyle(color: Colors.black, fontSize: 16),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -88,10 +88,10 @@ class _GoalScreenState extends State<GoalScreen> {
                       height: 60,
                       width: double.infinity,
                       decoration: BoxDecoration(
-                        color: isSelected ? Colors.blue : Colors.grey[800],
+                        color: isSelected ? Colors.blue : Color(0xFFE4E4E4),
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
-                          color: isSelected ? Color(0xFF9C7B44) : Colors.grey,
+                          color: isSelected ? Color(0xFF004DFF) : Colors.grey,
                           width: 2,
                         ),
                       ),
@@ -99,7 +99,7 @@ class _GoalScreenState extends State<GoalScreen> {
                         child: Text(
                           goal,
                           style: TextStyle(
-                            color: isSelected ? Colors.white : Colors.grey[400],
+                            color: isSelected ? Colors.white : Colors.black,
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
@@ -126,7 +126,7 @@ class _GoalScreenState extends State<GoalScreen> {
                         Navigator.pop(context);
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF9C7B44),
+                        backgroundColor: const Color(0xFF004DFF),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30),
                         ),
@@ -138,7 +138,7 @@ class _GoalScreenState extends State<GoalScreen> {
                       icon: const Icon(Icons.arrow_back_ios, size: 16),
                       label: const Text(
                         "Back",
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.black),
                       ),
                     ),
 
@@ -161,7 +161,7 @@ class _GoalScreenState extends State<GoalScreen> {
                             }
                           : null,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF9C7B44),
+                        backgroundColor: const Color(0xFF004DFF),
                         disabledBackgroundColor: Colors.grey.shade700,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30),
@@ -174,7 +174,7 @@ class _GoalScreenState extends State<GoalScreen> {
                       icon: const Icon(Icons.arrow_forward_ios, size: 16),
                       label: const Text(
                         "Next",
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.black),
                       ),
                     ),
                   ],

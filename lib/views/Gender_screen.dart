@@ -28,7 +28,7 @@ class _GenderScreenState extends State<GenderScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFDBE4FF),
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
@@ -78,28 +78,6 @@ class _GenderScreenState extends State<GenderScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      //  Skip to previous page
-                      ElevatedButton.icon(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF004DFF),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 25,
-                            vertical: 12,
-                          ),
-                        ),
-                        icon: const Icon(Icons.arrow_back_ios, size: 16),
-                        label: const Text(
-                          "Back",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-
                       //  Next to Age screen
                       ElevatedButton.icon(
                         onPressed: selectedGender != null

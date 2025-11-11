@@ -34,7 +34,7 @@ class _LevelScreenState extends State<LevelScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Stack(
           children: [
@@ -46,7 +46,7 @@ class _LevelScreenState extends State<LevelScreen> {
                   child: Text(
                     "What is your Fitness Level?",
                     style: TextStyle(
-                      color: Colors.white,
+                      color: Colors.black,
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                     ),
@@ -57,7 +57,7 @@ class _LevelScreenState extends State<LevelScreen> {
                 Center(
                   child: Text(
                     "This helps us create your personalised plan",
-                    style: TextStyle(color: Colors.grey, fontSize: 16),
+                    style: TextStyle(color: Colors.black, fontSize: 16),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -87,12 +87,12 @@ class _LevelScreenState extends State<LevelScreen> {
                       height: 100,
                       width: double.infinity,
                       decoration: BoxDecoration(
-                        color: isSelected ? Colors.blue : Colors.grey[800],
+                        color: isSelected ? Colors.blue : Colors.white,
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
                           color: isSelected
-                              ? const Color(0xFF9C7B44)
-                              : Colors.grey,
+                              ? const Color(0xFF004DFF)
+                              : Colors.black,
                           width: 2,
                         ),
                       ),
@@ -100,7 +100,7 @@ class _LevelScreenState extends State<LevelScreen> {
                         child: Text(
                           level,
                           style: TextStyle(
-                            color: isSelected ? Colors.white : Colors.grey[400],
+                            color: isSelected ? Colors.white : Colors.black,
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
@@ -126,7 +126,7 @@ class _LevelScreenState extends State<LevelScreen> {
                     ElevatedButton.icon(
                       onPressed: () => Navigator.pop(context),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF9C7B44),
+                        backgroundColor: const Color(0xFF004DFF),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30),
                         ),
@@ -174,7 +174,7 @@ class _LevelScreenState extends State<LevelScreen> {
                             }
                           : null,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF9C7B44),
+                        backgroundColor: const Color(0xFF004DFF),
                         disabledBackgroundColor: Colors.grey.shade700,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30),
@@ -189,7 +189,7 @@ class _LevelScreenState extends State<LevelScreen> {
                           ? const CircularProgressIndicator(color: Colors.white)
                           : const Text(
                               "Next",
-                              style: TextStyle(color: Colors.white),
+                              style: TextStyle(color: Colors.black),
                             ),
                     ),
                   ],

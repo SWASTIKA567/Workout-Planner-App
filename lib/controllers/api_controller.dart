@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:http/http.dart' as http;
 import '/models/user_input_model.dart';
 
@@ -17,11 +18,11 @@ class ApiController {
         final data = jsonDecode(response.body);
         return data["workout_type"];
       } else {
-        print("Error: ${response.statusCode}");
+        log("Error: ${response.statusCode}");
         return null;
       }
     } catch (e) {
-      print("API Error: $e");
+      log("API Error: $e");
       return null;
     }
   }

@@ -36,7 +36,7 @@ class _ChoiceScreenState extends State<ChoiceScreen> {
                 child: Container(
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.grey.shade200,
+                    color: Color(0xFFCCCCCC),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.2),
@@ -84,7 +84,7 @@ class _ChoiceScreenState extends State<ChoiceScreen> {
                       _buildPreferenceBox(
                         context,
                         title: "Vegetarian",
-                        imagePath: "assets/veg.jpeg",
+                        imagePath: "assets/veg.jpg",
                         scale: _scale1,
                         onTapDown: () => setState(() => _scale1 = 1.05),
                         onTapUp: () => setState(() => _scale1 = 1.0),
@@ -102,7 +102,7 @@ class _ChoiceScreenState extends State<ChoiceScreen> {
                       _buildPreferenceBox(
                         context,
                         title: "Non-Vegetarian",
-                        imagePath: "assets/non veg.webp",
+                        imagePath: "assets/non veg.jpg",
                         scale: _scale2,
                         onTapDown: () => setState(() => _scale2 = 1.05),
                         onTapUp: () => setState(() => _scale2 = 1.0),
@@ -166,11 +166,11 @@ class _ChoiceScreenState extends State<ChoiceScreen> {
               ),
             ],
           ),
-          alignment: Alignment.centerLeft,
+          alignment: Alignment.center,
           child: Text(
             title,
             style: const TextStyle(
-              color: Colors.black,
+              color: Colors.white,
               fontSize: 20,
               fontWeight: FontWeight.w700,
               letterSpacing: 1.0,

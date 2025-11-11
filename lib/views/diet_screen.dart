@@ -12,12 +12,14 @@ class DietScreen extends StatelessWidget {
     required Color color,
   }) {
     return Container(
-      padding: const EdgeInsets.all(18),
+      width: 200,
+      height: 200,
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: color,
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(20),
         boxShadow: const [
-          BoxShadow(color: Colors.black26, blurRadius: 6, offset: Offset(0, 3)),
+          BoxShadow(color: Colors.black26, blurRadius: 8, offset: Offset(0, 3)),
         ],
       ),
       child: Column(
@@ -29,7 +31,7 @@ class DietScreen extends StatelessWidget {
             style: const TextStyle(
               fontWeight: FontWeight.w600,
               fontSize: 16,
-              color: Colors.white,
+              color: Colors.black,
             ),
           ),
           Text(
@@ -37,7 +39,7 @@ class DietScreen extends StatelessWidget {
             style: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 20,
-              color: Colors.white,
+              color: Colors.black,
             ),
           ),
         ],
@@ -98,11 +100,14 @@ class DietScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 12),
-                      const Text(
-                        "Diet",
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
+                      Center(
+                        child: Text(
+                          "Diet & Nutrition",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ],
@@ -151,18 +156,31 @@ class DietScreen extends StatelessWidget {
                   ),
 
                   const SizedBox(height: 24),
+                  Column(
+                    children: [
+                      Text(
+                        " Your Personalised Diet Plan",
+                        style: TextStyle(
+                          fontSize: 23,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 30),
 
                   // Big container below
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
-                      color: Colors.teal.shade400,
+                      color: Colors.lightBlue,
                       borderRadius: BorderRadius.circular(18),
                       boxShadow: const [
                         BoxShadow(
                           color: Colors.black26,
-                          blurRadius: 6,
+                          blurRadius: 8,
                           offset: Offset(0, 3),
                         ),
                       ],
@@ -175,7 +193,7 @@ class DietScreen extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                            color: Colors.black,
                           ),
                         ),
                         SizedBox(height: 12),

@@ -29,7 +29,7 @@ class _TargetWeightScreenState extends State<TargetWeightScreen> {
       "Gender : ${widget.gender}, Age: ${widget.age} ,Weight : ${widget.weight}, Height : ${widget.height}",
     );
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Stack(
           children: [
@@ -40,7 +40,7 @@ class _TargetWeightScreenState extends State<TargetWeightScreen> {
                 const Text(
                   "What Is Your Target Weight?",
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Colors.black,
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                   ),
@@ -48,7 +48,7 @@ class _TargetWeightScreenState extends State<TargetWeightScreen> {
                 const SizedBox(height: 8),
                 const Text(
                   "This helps us Create your personalised plan",
-                  style: TextStyle(color: Colors.grey, fontSize: 16),
+                  style: TextStyle(color: Colors.black, fontSize: 16),
                 ),
                 const SizedBox(height: 60),
 
@@ -90,7 +90,7 @@ class _TargetWeightScreenState extends State<TargetWeightScreen> {
                                 '$targetWeight kg',
                                 style: TextStyle(
                                   color: isSelected
-                                      ? Colors.white
+                                      ? Colors.black
                                       : Colors.grey,
                                   fontSize: isSelected ? 32 : 24,
                                   fontWeight: isSelected
@@ -109,7 +109,7 @@ class _TargetWeightScreenState extends State<TargetWeightScreen> {
                       child: Container(
                         width: 100,
                         height: 3,
-                        color: Colors.deepOrange,
+                        color: Color(0xFF004DFF),
                       ),
                     ),
                     Positioned(
@@ -117,7 +117,7 @@ class _TargetWeightScreenState extends State<TargetWeightScreen> {
                       child: Container(
                         width: 100,
                         height: 3,
-                        color: Colors.deepOrange,
+                        color: Color(0xFF004DFF),
                       ),
                     ),
                   ],
@@ -140,7 +140,7 @@ class _TargetWeightScreenState extends State<TargetWeightScreen> {
                         Navigator.pop(context);
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF9C7B44),
+                        backgroundColor: const Color(0xFF004DFF),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30),
                         ),
@@ -152,7 +152,7 @@ class _TargetWeightScreenState extends State<TargetWeightScreen> {
                       icon: const Icon(Icons.arrow_back_ios, size: 16),
                       label: const Text(
                         "Back",
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.black),
                       ),
                     ),
 
@@ -174,7 +174,7 @@ class _TargetWeightScreenState extends State<TargetWeightScreen> {
                             }
                           : null, // disabled if gender not selected
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF9C7B44),
+                        backgroundColor: const Color(0xFF004DFF),
                         disabledBackgroundColor: Colors.grey.shade700,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30),
@@ -187,7 +187,7 @@ class _TargetWeightScreenState extends State<TargetWeightScreen> {
                       icon: const Icon(Icons.arrow_forward_ios, size: 16),
                       label: const Text(
                         "Next",
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.black),
                       ),
                     ),
                   ],
