@@ -131,6 +131,16 @@ class DietController extends GetxController {
         log(
           "DEBUG: Parsed values - Calories: ${caloriesKcal.value}, Carbs: ${carbsG.value}, Fats: ${fatsG.value}, Protein: ${proteinG.value}",
         );
+        await _firestore.collection('users').doc(userId).update({
+          'diet_plan': {
+            'calories_kcal': caloriesKcal.value,
+            'carbs_g': carbsG.value,
+            'fats_g': fatsG.value,
+            'protein_g': proteinG.value,
+            'day_index': dayIndex.value,
+            'last_updated': FieldValue.serverTimestamp(),
+          },
+        });
       } else {
         log("DEBUG: API call failed with status ${response.statusCode}");
       }

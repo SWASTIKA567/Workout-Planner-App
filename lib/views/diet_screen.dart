@@ -2,10 +2,19 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:workout_planner/controllers/diet_controller.dart';
+import 'package:workout_planner/controllers/meal_controller.dart';
 import 'home_screen.dart';
 
 class DietScreen extends StatelessWidget {
-  const DietScreen({super.key, required String userId});
+  final String userId;
+  final String foodPreference;
+
+  const DietScreen({
+    super.key,
+    required this.userId,
+    required this.foodPreference,
+  });
+
   Widget buildSmallBox({
     required String title,
     required String value,
@@ -47,6 +56,51 @@ class DietScreen extends StatelessWidget {
     );
   }
 
+  Widget buildMealItem(String meal, String details) {
+    if (details.isEmpty) return SizedBox.shrink();
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "• ",
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+          Expanded(
+            child: RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: "$meal: ",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  TextSpan(
+                    text: details,
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.white,
+                      height: 1.4,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
@@ -54,6 +108,12 @@ class DietScreen extends StatelessWidget {
       return const Scaffold(body: Center(child: Text("User not logged in")));
 
     final controller = Get.put(DietController(userId: user.uid));
+    final mealController = Get.put(MealController(userId: user.uid));
+
+    // Fetch meal plan after a short delay to ensure diet data is loaded
+    Future.delayed(Duration(milliseconds: 500), () {
+      mealController.fetchMealPlanFromAPI(foodPreference);
+    });
 
     return Scaffold(
       backgroundColor: const Color(0xFFF6F7FB),
@@ -169,47 +229,146 @@ class DietScreen extends StatelessWidget {
                   ),
 
                   const SizedBox(height: 30),
-
-                  // Big container below
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: Colors.lightBlue,
-                      borderRadius: BorderRadius.circular(18),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Colors.black26,
-                          blurRadius: 8,
-                          offset: Offset(0, 3),
+                  Center(
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      decoration: BoxDecoration(
+                        color: foodPreference.toLowerCase() == "veg"
+                            ? Colors.green.shade100
+                            : Colors.red.shade100,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text(
+                        foodPreference.toUpperCase(),
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: foodPreference.toLowerCase() == "veg"
+                              ? Colors.green.shade800
+                              : Colors.red.shade800,
                         ),
-                      ],
-                    ),
-                    child: const Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Today's Plan",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                        ),
-                        SizedBox(height: 12),
-                        Text(
-                          "Breakfast: Oats + 2 Eggs\n"
-                          "Lunch: Rice + Chicken + Salad\n"
-                          "Dinner: Quinoa + Veggies",
-                          style: TextStyle(
-                            fontSize: 20,
-                            height: 3.5,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                   ),
+                  const SizedBox(height: 20),
+
+                  // Meal plan container with loading state
+                  Obx(() {
+                    if (mealController.isLoading.value) {
+                      return Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(40),
+                        decoration: BoxDecoration(
+                          color: Colors.lightBlue,
+                          borderRadius: BorderRadius.circular(18),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Colors.black26,
+                              blurRadius: 8,
+                              offset: Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: Center(
+                          child: Column(
+                            children: [
+                              CircularProgressIndicator(color: Colors.white),
+                              SizedBox(height: 16),
+                              Text(
+                                "Generating your meal plan...",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    }
+
+                    // Big container below
+                    return Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: Colors.lightBlue,
+                        borderRadius: BorderRadius.circular(18),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.black26,
+                            blurRadius: 8,
+                            offset: Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+                            children: [
+                              Text(
+                                "Today's Plan",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 6,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Text(
+                                  "Day ${mealController.dayIndex.value}",
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.lightBlue,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 20),
+
+                          buildMealItem(
+                            "Breakfast",
+                            mealController.breakfast.value,
+                          ),
+                          buildMealItem("Lunch", mealController.lunch.value),
+                          buildMealItem(
+                            "Evening Snack",
+                            mealController.eveningSnack.value,
+                          ),
+                          buildMealItem("Dinner", mealController.dinner.value),
+
+                          if (mealController.breakfast.value.isEmpty &&
+                              mealController.lunch.value.isEmpty &&
+                              mealController.dinner.value.isEmpty &&
+                              mealController.eveningSnack.value.isEmpty)
+                            Center(
+                              child: Text(
+                                "No meal plan available",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.white70,
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+                    );
+                  }),
                 ],
               ),
             ),

@@ -92,8 +92,10 @@ class _ChoiceScreenState extends State<ChoiceScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  DietScreen(userId: currentUserId),
+                              builder: (context) => DietScreen(
+                                userId: currentUserId,
+                                foodPreference: "veg",
+                              ),
                             ),
                           );
                         },
@@ -110,8 +112,10 @@ class _ChoiceScreenState extends State<ChoiceScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  DietScreen(userId: currentUserId),
+                              builder: (context) => DietScreen(
+                                userId: currentUserId,
+                                foodPreference: "non veg",
+                              ),
                             ),
                           );
                         },
