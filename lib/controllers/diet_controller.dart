@@ -28,6 +28,28 @@ class DietController extends GetxController {
   void onInit() {
     super.onInit();
     fetchInputsAndDayIndex();
+    listenToDayIndexChanges();
+  }
+
+  void listenToDayIndexChanges() {
+    _firestore.collection('users').doc(userId).snapshots().listen((snapshot) {
+      if (snapshot.exists && snapshot.data() != null) {
+        final workoutPlans = snapshot.data()!['workout_plans'] ?? {};
+
+        if (workoutPlans.containsKey('day_index')) {
+          final newDayIndex = workoutPlans['day_index'] is int
+              ? workoutPlans['day_index']
+              : int.tryParse(workoutPlans['day_index']?.toString() ?? '0') ?? 0;
+
+          // Only fetch new diet if day_index actually changed
+          if (newDayIndex != dayIndex.value) {
+            log("Day index changed from ${dayIndex.value} to $newDayIndex");
+            dayIndex.value = newDayIndex;
+            fetchDietFromAPI(); // Automatically fetch new diet plan
+          }
+        }
+      }
+    });
   }
 
   Future<void> fetchInputsAndDayIndex() async {
@@ -35,7 +57,6 @@ class DietController extends GetxController {
       isLoading.value = true;
       log("Fetching diet data for user: $userId");
 
-      //  Step 1: Fetch 'inputs' map from Firestore
       final doc = await _firestore.collection('users').doc(userId).get();
 
       if (!doc.exists || doc.data() == null) {
@@ -50,7 +71,6 @@ class DietController extends GetxController {
 
       log("Fetched inputs: $inputs");
 
-      //  Step 2: Prepare body for API
       age.value = inputs['age'] ?? 0;
       gender.value = inputs['gender'] ?? '';
       heightCm.value = (inputs['height_cm'] ?? 0).toDouble();
@@ -59,7 +79,6 @@ class DietController extends GetxController {
       goal.value = inputs['goal'] ?? '';
       fitnessLevel.value = inputs['fitness_level'] ?? '';
 
-      // Fetch day_index with detailed logging
       log("Full document data: $data");
       log("workout_plans data: $workoutPlans");
       log("workout_plans type: ${workoutPlans.runtimeType}");
@@ -83,15 +102,12 @@ class DietController extends GetxController {
 
       isLoading.value = false;
 
-      // Call API after fetching inputs
       fetchDietFromAPI();
     } catch (e) {
       log("DEBUG: Error fetching inputs -> $e");
       isLoading.value = false;
     }
   }
-
-  //  Step 3: Call API
 
   Future<void> fetchDietFromAPI() async {
     try {
@@ -117,12 +133,10 @@ class DietController extends GetxController {
         final responseData = jsonDecode(response.body);
         log("DEBUG: API Raw Response -> $responseData");
 
-        // Check if response is a list and get the first element
         final data = responseData is List && responseData.isNotEmpty
             ? responseData[0]
             : responseData;
 
-        // Use the helper method
         caloriesKcal.value = _parseDouble(data['calories_kcal']);
         carbsG.value = _parseDouble(data['carbs_g']);
         fatsG.value = _parseDouble(data['fats_g']);

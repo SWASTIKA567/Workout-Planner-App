@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:workout_planner/views/Gender_screen.dart';
 import 'weight_screen.dart';
 
 class AgeScreen extends StatefulWidget {
@@ -126,7 +127,12 @@ class _AgeScreenState extends State<AgeScreen> {
                   children: [
                     ElevatedButton.icon(
                       onPressed: () {
-                        Navigator.pop(context);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => GenderScreen(),
+                          ),
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF004DFF),

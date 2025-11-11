@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'home_screen.dart';
-import 'choice_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -16,17 +15,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final user = FirebaseAuth.instance.currentUser;
 
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _ageController = TextEditingController();
-  final TextEditingController _genderController = TextEditingController();
-  final TextEditingController _heightController = TextEditingController();
-  final TextEditingController _weightController = TextEditingController();
-  final TextEditingController _targetWeightController = TextEditingController();
-  final TextEditingController _goalController = TextEditingController();
-  final TextEditingController _fitnessLevelController = TextEditingController();
+  String age = '';
+  String gender = '';
+  String height = '';
+  String weight = '';
+  String targetWeight = '';
+  String goal = '';
+  String fitnessLevel = '';
   String workoutType = '';
 
-  bool _isEditing = false;
   bool _isLoading = true;
 
   @override
@@ -35,7 +32,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     fetchUserData();
   }
 
-  // Fetch all inputs + workout_type
   Future<void> fetchUserData() async {
     try {
       if (user == null) {
@@ -49,19 +45,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
         final data = doc.data()!;
         final inputs = data['inputs'] ?? {};
 
-        if (inputs.isEmpty) {
-          showSnackBar("Inputs not found");
-        }
-
         setState(() {
-          _ageController.text = inputs['age']?.toString() ?? '';
-          _genderController.text = inputs['gender'] ?? '';
-          _heightController.text = inputs['height_cm']?.toString() ?? '';
-          _weightController.text = inputs['weight_kg']?.toString() ?? '';
-          _targetWeightController.text =
-              inputs['target_weight']?.toString() ?? '';
-          _goalController.text = inputs['goal'] ?? '';
-          _fitnessLevelController.text = inputs['fitness_level'] ?? '';
+          age = inputs['age']?.toString() ?? '';
+          gender = inputs['gender'] ?? '';
+          height = inputs['height_cm']?.toString() ?? '';
+          weight = inputs['weight_kg']?.toString() ?? '';
+          targetWeight = inputs['target_weight']?.toString() ?? '';
+          goal = inputs['goal'] ?? '';
+          fitnessLevel = inputs['fitness_level'] ?? '';
           workoutType = data['workout_type'] ?? 'Not set';
           _isLoading = false;
         });
@@ -74,46 +65,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     } catch (e) {
       setState(() => _isLoading = false);
       showSnackBar("Error fetching data: $e");
-    }
-  }
-
-  // Save inputs
-  Future<void> _saveUserData() async {
-    if (user == null) return;
-
-    try {
-      await _firestore.collection('users').doc(user!.uid).set({
-        'inputs': {
-          'age': _ageController.text.trim(),
-          'gender': _genderController.text.trim(),
-          'height_cm': _heightController.text.trim(),
-          'weight_kg': _weightController.text.trim(),
-          'target_weight': _targetWeightController.text.trim(),
-          'goal': _goalController.text.trim(),
-          'fitness_level': _fitnessLevelController.text.trim(),
-        },
-      }, SetOptions(merge: true));
-
-      await user!.updateDisplayName(_nameController.text.trim());
-      await user!.reload();
-
-      showSnackBar("Profile updated successfully");
-      setState(() => _isEditing = false);
-    } catch (e) {
-      showSnackBar("Error saving profile: $e");
-    }
-  }
-
-  // Logout logic
-  Future<void> _logout() async {
-    try {
-      await _auth.signOut();
-      if (mounted) {
-        Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
-        showSnackBar('Logged out successfully');
-      }
-    } catch (e) {
-      showSnackBar("Error logging out: $e");
     }
   }
 
@@ -137,7 +88,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Color(0xFFB1C8FF),
+        backgroundColor: const Color(0xFFB1C8FF),
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
@@ -153,17 +104,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
-        actions: [
-          IconButton(
-            icon: Icon(
-              _isEditing ? Icons.close : Icons.edit,
-              color: Colors.black,
-            ),
-            onPressed: () {
-              setState(() => _isEditing = !_isEditing);
-            },
-          ),
-        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
@@ -185,33 +125,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             const SizedBox(height: 30),
 
-            _buildTextField("Age", _ageController),
-            _buildTextField("Gender", _genderController),
-            _buildTextField("Height (cm)", _heightController),
-            _buildTextField("Current Weight (kg)", _weightController),
-            _buildTextField("Target Weight (kg)", _targetWeightController),
-            _buildTextField("Goal", _goalController),
-            _buildTextField("Fitness Level", _fitnessLevelController),
+            _buildInfoTile("Age", age),
+            _buildInfoTile("Gender", gender),
+            _buildInfoTile("Height (cm)", height),
+            _buildInfoTile("Current Weight (kg)", weight),
+            _buildInfoTile("Target Weight (kg)", targetWeight),
+            _buildInfoTile("Goal", goal),
+            _buildInfoTile("Fitness Level", fitnessLevel),
             const SizedBox(height: 15),
             Text(
               "Workout Type: $workoutType",
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
             ),
             const SizedBox(height: 30),
-            if (_isEditing)
-              ElevatedButton.icon(
-                onPressed: _saveUserData,
-                icon: const Icon(Icons.save, color: Colors.white),
-                label: const Text("Save Changes"),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  minimumSize: const Size(double.infinity, 50),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                ),
-              ),
-            const SizedBox(height: 20),
             ElevatedButton.icon(
               onPressed: _logout,
               icon: const Icon(Icons.logout, color: Colors.white),
@@ -230,23 +156,52 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildTextField(String label, TextEditingController controller) {
+  Widget _buildInfoTile(String label, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
-      child: TextField(
-        controller: controller,
-        enabled: _isEditing,
-        decoration: InputDecoration(
-          labelText: label,
-          labelStyle: const TextStyle(
-            fontWeight: FontWeight.w600,
-            color: Color(0xFF004DFF),
-          ),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-          filled: !_isEditing,
-          fillColor: _isEditing ? Colors.white : Colors.white,
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: const Color(0xFFF5F6FA),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: const Color(0xFFB1C8FF)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              label,
+              style: const TextStyle(
+                color: Color(0xFF004DFF),
+                fontWeight: FontWeight.w600,
+                fontSize: 14,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              value.isNotEmpty ? value : 'Not set',
+              style: const TextStyle(
+                color: Colors.black,
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
         ),
       ),
     );
+  }
+
+  Future<void> _logout() async {
+    try {
+      await _auth.signOut();
+      if (mounted) {
+        Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+        showSnackBar('Logged out successfully');
+      }
+    } catch (e) {
+      showSnackBar("Error logging out: $e");
+    }
   }
 }

@@ -26,50 +26,88 @@ class MealController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fetchDietPlanFromFirestore();
+    listenToDietPlanChanges(); // NEW: Listen to real-time changes
+    fetchSavedMealPlan(); // Load existing meal plan if any
   }
 
-  Future<void> fetchDietPlanFromFirestore() async {
-    try {
-      log("Fetching diet plan from Firestore for user: $userId");
+  // NEW METHOD: Real-time listener for diet plan changes
+  void listenToDietPlanChanges() {
+    log("Setting up diet plan listener for user: $userId");
 
-      final doc = await _firestore.collection('users').doc(userId).get();
+    _firestore.collection('users').doc(userId).snapshots().listen((snapshot) {
+      if (snapshot.exists && snapshot.data() != null) {
+        final data = snapshot.data()!;
+        final dietPlan = data['diet_plan'];
 
-      if (!doc.exists || doc.data() == null) {
-        log("No diet plan found for user: $userId");
-        return;
+        if (dietPlan != null) {
+          final newCalories = _parseDouble(dietPlan['calories_kcal']);
+          final newCarbs = _parseDouble(dietPlan['carbs_g']);
+          final newFats = _parseDouble(dietPlan['fats_g']);
+          final newProtein = _parseDouble(dietPlan['protein_g']);
+          final newDayIndex = dietPlan['day_index'] ?? 0;
+
+          log("📥 Diet plan update detected:");
+          log(
+            "   OLD - Cal: ${caloriesKcal.value}, Carbs: ${carbsG.value}, Protein: ${proteinG.value}, Fats: ${fatsG.value}, Day: ${dayIndex.value}",
+          );
+          log(
+            "   NEW - Cal: $newCalories, Carbs: $newCarbs, Protein: $newProtein, Fats: $newFats, Day: $newDayIndex",
+          );
+
+          // Check if macros or day changed
+          bool macrosChanged =
+              newCalories != caloriesKcal.value ||
+              newCarbs != carbsG.value ||
+              newFats != fatsG.value ||
+              newProtein != proteinG.value;
+
+          bool dayChanged = newDayIndex != dayIndex.value;
+
+          // Update values
+          caloriesKcal.value = newCalories;
+          carbsG.value = newCarbs;
+          fatsG.value = newFats;
+          proteinG.value = newProtein;
+          dayIndex.value = newDayIndex;
+
+          // If macros or day changed, fetch new meal plan
+          if (macrosChanged || dayChanged) {
+            log("🔄 Macros/Day changed, fetching new meal plan");
+
+            // Use current food preference or default
+            String currentFoodPref = foodPreference.value.isEmpty
+                ? 'vegetarian'
+                : foodPreference.value;
+
+            fetchMealPlanFromAPI(currentFoodPref);
+          } else {
+            log("No significant changes, skipping meal API call");
+          }
+        }
       }
-
-      final data = doc.data()!;
-      final dietPlan = data['diet_plan'];
-
-      if (dietPlan != null) {
-        caloriesKcal.value = _parseDouble(dietPlan['calories_kcal']);
-        carbsG.value = _parseDouble(dietPlan['carbs_g']);
-        fatsG.value = _parseDouble(dietPlan['fats_g']);
-        proteinG.value = _parseDouble(dietPlan['protein_g']);
-        dayIndex.value = dietPlan['day_index'] ?? 0;
-
-        log(
-          "Fetched diet plan - Calories: ${caloriesKcal.value}, Carbs: ${carbsG.value}, Protein: ${proteinG.value}, Fats: ${fatsG.value}, Day: ${dayIndex.value}",
-        );
-      } else {
-        log("No diet_plan field found in Firestore");
-      }
-    } catch (e) {
-      log("Error fetching diet plan from Firestore: $e");
-    }
+    });
   }
+
+  // REMOVED: fetchDietPlanFromFirestore() - no longer needed as we have real-time listener
 
   Future<void> changeDayAndFetchMeals(int newDayIndex) async {
-    log("Changing day from ${dayIndex.value} to $newDayIndex");
-    dayIndex.value = newDayIndex;
+    log("User manually changing day from ${dayIndex.value} to $newDayIndex");
 
+    // Don't update dayIndex here - it will be updated by the listener
+    // Just fetch meals with the new day index
     String currentFoodPref = foodPreference.value.isEmpty
         ? 'vegetarian'
         : foodPreference.value;
 
+    // Temporarily use the new day index for the API call
+    final originalDayIndex = dayIndex.value;
+    dayIndex.value = newDayIndex;
+
     await fetchMealPlanFromAPI(currentFoodPref);
+
+    // Note: If you want to persist this day change to Firestore,
+    // you should update workout_plans.day_index in Firestore
+    // and let the DietController listener handle the rest
   }
 
   Future<void> fetchMealPlanFromAPI(String foodPref) async {
@@ -78,7 +116,7 @@ class MealController extends GetxController {
       foodPreference.value = foodPref;
 
       final url = Uri.parse("https://meal-plan-new-api.onrender.com/predict");
-      log("Sending POST to $url");
+      log("🚀 Sending POST to $url");
 
       final requestBody = {
         "calories_kcal": caloriesKcal.value,
@@ -89,8 +127,7 @@ class MealController extends GetxController {
         "food_preference": foodPref,
       };
 
-      log("Request body: $requestBody");
-      log("Using day_index: ${dayIndex.value}");
+      log("📤 Request body: $requestBody");
 
       final response = await http.post(
         url,
@@ -100,7 +137,7 @@ class MealController extends GetxController {
 
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
-        log("DEBUG: Meal Plan API Response -> $responseData");
+        log("📥 Meal Plan API Response -> $responseData");
 
         final predictions = responseData['predictions'];
         if (predictions != null && predictions.isNotEmpty) {
@@ -111,24 +148,24 @@ class MealController extends GetxController {
           dinner.value = mealPlan['dinner'] ?? '';
           eveningSnack.value = mealPlan['evening_snack'] ?? '';
 
-          log("Meal plan fetched successfully");
-          log("Breakfast: ${breakfast.value}");
-          log("Lunch: ${lunch.value}");
-          log("Dinner: ${dinner.value}");
-          log("Evening Snack: ${eveningSnack.value}");
+          log("✅ Meal plan fetched successfully");
+          log("   Breakfast: ${breakfast.value}");
+          log("   Lunch: ${lunch.value}");
+          log("   Dinner: ${dinner.value}");
+          log("   Evening Snack: ${eveningSnack.value}");
 
           await saveMealPlanToFirestore();
         } else {
-          log("No predictions found in response");
+          log("⚠️ No predictions found in response");
         }
       } else {
-        log("Meal plan API failed with status ${response.statusCode}");
+        log("❌ Meal plan API failed with status ${response.statusCode}");
         log("Response body: ${response.body}");
       }
 
       isLoading.value = false;
     } catch (e) {
-      log("Error calling Meal Plan API: $e");
+      log("❌ Error calling Meal Plan API: $e");
       isLoading.value = false;
     }
   }
@@ -145,13 +182,11 @@ class MealController extends GetxController {
           'day_index': dayIndex.value,
           'last_updated': FieldValue.serverTimestamp(),
         },
-
-        'diet_plan.day_index': dayIndex.value,
       });
 
-      log("Meal plan saved to Firestore successfully");
+      log("✅ Meal plan saved to Firestore successfully");
     } catch (e) {
-      log("Error saving meal plan to Firestore: $e");
+      log("❌ Error saving meal plan to Firestore: $e");
     }
   }
 
@@ -168,13 +203,13 @@ class MealController extends GetxController {
           dinner.value = mealPlan['dinner'] ?? '';
           eveningSnack.value = mealPlan['evening_snack'] ?? '';
           foodPreference.value = mealPlan['food_preference'] ?? '';
-          dayIndex.value = mealPlan['day_index'] ?? 0;
+          // Don't update dayIndex here - let the listener handle it
 
-          log("Loaded saved meal plan from Firestore");
+          log("✅ Loaded saved meal plan from Firestore");
         }
       }
     } catch (e) {
-      log("Error fetching saved meal plan: $e");
+      log("❌ Error fetching saved meal plan: $e");
     }
   }
 
@@ -184,5 +219,11 @@ class MealController extends GetxController {
     if (value is int) return value.toDouble();
     if (value is String) return double.tryParse(value) ?? 0.0;
     return 0.0;
+  }
+
+  @override
+  void onClose() {
+    // Cleanup if needed (GetX handles stream disposal automatically)
+    super.onClose();
   }
 }

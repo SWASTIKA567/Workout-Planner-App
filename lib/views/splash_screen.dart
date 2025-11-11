@@ -15,7 +15,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    // ✅ Delay until after first frame is rendered
+    //  Delay until after first frame is rendered
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _checkLoginStatus();
     });
