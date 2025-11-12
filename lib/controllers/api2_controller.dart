@@ -36,7 +36,6 @@ class Api2Controller extends GetxController {
       //   return;
       // }
 
-      // Step 2️: Prepare request for API 2
       final body = {
         "workout_type": workoutType,
         "fitness_level": fitnessLevel,
@@ -49,7 +48,6 @@ class Api2Controller extends GetxController {
       log(" Sending POST to $url");
       log("Body : $body");
 
-      // Step 3️: Call API 2
       final response = await http.post(
         url,
         headers: {"Content-Type": "application/json"},
@@ -58,12 +56,10 @@ class Api2Controller extends GetxController {
       log("Status Code : ${response.statusCode}");
       log("Response: ${response.body}");
 
-      // Step 4️: Handle API response
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
         plan.value = jsonData["plan"] ?? [];
 
-        // Step 5️: Save plan to Firestore
         await _firestore.saveWorkoutPlan(userId, dayIndex, plan.toList());
         Get.snackbar("Success", "Day $dayIndex plan saved!");
       } else {

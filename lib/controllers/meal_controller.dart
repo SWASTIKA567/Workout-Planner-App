@@ -26,11 +26,10 @@ class MealController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    listenToDietPlanChanges(); // NEW: Listen to real-time changes
-    fetchSavedMealPlan(); // Load existing meal plan if any
+    listenToDietPlanChanges();
+    fetchSavedMealPlan();
   }
 
-  // NEW METHOD: Real-time listener for diet plan changes
   void listenToDietPlanChanges() {
     log("Setting up diet plan listener for user: $userId");
 
@@ -54,7 +53,6 @@ class MealController extends GetxController {
             "   NEW - Cal: $newCalories, Carbs: $newCarbs, Protein: $newProtein, Fats: $newFats, Day: $newDayIndex",
           );
 
-          // Check if macros or day changed
           bool macrosChanged =
               newCalories != caloriesKcal.value ||
               newCarbs != carbsG.value ||
@@ -63,18 +61,15 @@ class MealController extends GetxController {
 
           bool dayChanged = newDayIndex != dayIndex.value;
 
-          // Update values
           caloriesKcal.value = newCalories;
           carbsG.value = newCarbs;
           fatsG.value = newFats;
           proteinG.value = newProtein;
           dayIndex.value = newDayIndex;
 
-          // If macros or day changed, fetch new meal plan
           if (macrosChanged || dayChanged) {
-            log("🔄 Macros/Day changed, fetching new meal plan");
+            log(" Macros/Day changed, fetching new meal plan");
 
-            // Use current food preference or default
             String currentFoodPref = foodPreference.value.isEmpty
                 ? 'vegetarian'
                 : foodPreference.value;
@@ -88,26 +83,17 @@ class MealController extends GetxController {
     });
   }
 
-  // REMOVED: fetchDietPlanFromFirestore() - no longer needed as we have real-time listener
-
   Future<void> changeDayAndFetchMeals(int newDayIndex) async {
     log("User manually changing day from ${dayIndex.value} to $newDayIndex");
 
-    // Don't update dayIndex here - it will be updated by the listener
-    // Just fetch meals with the new day index
     String currentFoodPref = foodPreference.value.isEmpty
         ? 'vegetarian'
         : foodPreference.value;
 
-    // Temporarily use the new day index for the API call
     final originalDayIndex = dayIndex.value;
     dayIndex.value = newDayIndex;
 
     await fetchMealPlanFromAPI(currentFoodPref);
-
-    // Note: If you want to persist this day change to Firestore,
-    // you should update workout_plans.day_index in Firestore
-    // and let the DietController listener handle the rest
   }
 
   Future<void> fetchMealPlanFromAPI(String foodPref) async {
@@ -116,7 +102,7 @@ class MealController extends GetxController {
       foodPreference.value = foodPref;
 
       final url = Uri.parse("https://meal-plan-new-api.onrender.com/predict");
-      log("🚀 Sending POST to $url");
+      log(" Sending POST to $url");
 
       final requestBody = {
         "calories_kcal": caloriesKcal.value,
@@ -127,7 +113,7 @@ class MealController extends GetxController {
         "food_preference": foodPref,
       };
 
-      log("📤 Request body: $requestBody");
+      log("Request body: $requestBody");
 
       final response = await http.post(
         url,
@@ -137,7 +123,7 @@ class MealController extends GetxController {
 
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
-        log("📥 Meal Plan API Response -> $responseData");
+        log(" Meal Plan API Response -> $responseData");
 
         final predictions = responseData['predictions'];
         if (predictions != null && predictions.isNotEmpty) {
@@ -148,7 +134,7 @@ class MealController extends GetxController {
           dinner.value = mealPlan['dinner'] ?? '';
           eveningSnack.value = mealPlan['evening_snack'] ?? '';
 
-          log("✅ Meal plan fetched successfully");
+          log(" Meal plan fetched successfully");
           log("   Breakfast: ${breakfast.value}");
           log("   Lunch: ${lunch.value}");
           log("   Dinner: ${dinner.value}");
@@ -156,16 +142,16 @@ class MealController extends GetxController {
 
           await saveMealPlanToFirestore();
         } else {
-          log("⚠️ No predictions found in response");
+          log(" No predictions found in response");
         }
       } else {
-        log("❌ Meal plan API failed with status ${response.statusCode}");
+        log(" Meal plan API failed with status ${response.statusCode}");
         log("Response body: ${response.body}");
       }
 
       isLoading.value = false;
     } catch (e) {
-      log("❌ Error calling Meal Plan API: $e");
+      log(" Error calling Meal Plan API: $e");
       isLoading.value = false;
     }
   }
@@ -184,9 +170,9 @@ class MealController extends GetxController {
         },
       });
 
-      log("✅ Meal plan saved to Firestore successfully");
+      log(" Meal plan saved to Firestore successfully");
     } catch (e) {
-      log("❌ Error saving meal plan to Firestore: $e");
+      log(" Error saving meal plan to Firestore: $e");
     }
   }
 
@@ -203,13 +189,12 @@ class MealController extends GetxController {
           dinner.value = mealPlan['dinner'] ?? '';
           eveningSnack.value = mealPlan['evening_snack'] ?? '';
           foodPreference.value = mealPlan['food_preference'] ?? '';
-          // Don't update dayIndex here - let the listener handle it
 
-          log("✅ Loaded saved meal plan from Firestore");
+          log(" Loaded saved meal plan from Firestore");
         }
       }
     } catch (e) {
-      log("❌ Error fetching saved meal plan: $e");
+      log(" Error fetching saved meal plan: $e");
     }
   }
 
@@ -223,7 +208,6 @@ class MealController extends GetxController {
 
   @override
   void onClose() {
-    // Cleanup if needed (GetX handles stream disposal automatically)
     super.onClose();
   }
 }

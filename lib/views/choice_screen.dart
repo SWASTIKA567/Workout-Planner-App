@@ -84,7 +84,7 @@ class _ChoiceScreenState extends State<ChoiceScreen> {
                       _buildPreferenceBox(
                         context,
                         title: "Vegetarian",
-                        imagePath: "assets/veg.jpg",
+                        imagePath: "assets/veg.jpeg",
                         scale: _scale1,
                         onTapDown: () => setState(() => _scale1 = 1.05),
                         onTapUp: () => setState(() => _scale1 = 1.0),
@@ -104,7 +104,7 @@ class _ChoiceScreenState extends State<ChoiceScreen> {
                       _buildPreferenceBox(
                         context,
                         title: "Non-Vegetarian",
-                        imagePath: "assets/non veg.jpg",
+                        imagePath: "assets/non veg.jpeg",
                         scale: _scale2,
                         onTapDown: () => setState(() => _scale2 = 1.05),
                         onTapUp: () => setState(() => _scale2 = 1.0),

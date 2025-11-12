@@ -71,8 +71,9 @@ flutter:
     - assets/bg1.jpg
     - assets/female.svg
     - assets/male.svg
-    - assets/veg.jpg
-    - assets/non veg.jpg
+    - assets/veg.jpeg
+    - assets/non veg.jpeg
+    - assets/bg2.jpeg
     
 
 

@@ -68,12 +68,12 @@ class _WeightScreenState extends State<WeightScreen> {
                         physics: const FixedExtentScrollPhysics(),
                         onSelectedItemChanged: (index) {
                           setState(() {
-                            selectedWeight = index + 30;
+                            selectedWeight = index + 40;
                           });
                         },
                         childDelegate: ListWheelChildBuilderDelegate(
                           builder: (context, index) {
-                            final weight = index + 30;
+                            final weight = index + 40;
                             final isSelected = selectedWeight == weight;
                             return Center(
                               child: Text(
