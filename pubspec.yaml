@@ -41,6 +41,7 @@ dependencies:
   flutter_svg: ^2.2.1
   http: ^1.5.0
   get: ^4.7.2
+  rename: ^3.1.0
   
 
 
@@ -79,6 +80,7 @@ flutter:
     - assets/level2.jpeg
     - assets/level3.jpeg
     - assets/logo.jpeg
+    - assets/profile.jpeg
 
     
 

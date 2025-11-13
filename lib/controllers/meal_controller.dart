@@ -45,7 +45,7 @@ class MealController extends GetxController {
           final newProtein = _parseDouble(dietPlan['protein_g']);
           final newDayIndex = dietPlan['day_index'] ?? 0;
 
-          log("📥 Diet plan update detected:");
+          log(" Diet plan update detected:");
           log(
             "   OLD - Cal: ${caloriesKcal.value}, Carbs: ${carbsG.value}, Protein: ${proteinG.value}, Fats: ${fatsG.value}, Day: ${dayIndex.value}",
           );

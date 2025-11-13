@@ -78,7 +78,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     } on FirebaseAuthException catch (e) {
       if (mounted) {
         final errorMessage = getSignUpErrorMessage(e.code);
-        showSnackBar(errorMessage, color: Colors.red);
+        showSnackBar(errorMessage, color: Color(0xFFB1C8FF));
       }
     } catch (e) {
       if (mounted) {
