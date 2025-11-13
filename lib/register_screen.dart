@@ -238,11 +238,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
               const SizedBox(height: 40),
 
-              // Already have account
               Center(
                 child: GestureDetector(
                   onTap: () {
-                    Navigator.pop(context); // Go back to login
+                    Navigator.pop(context);
                   },
                   child: RichText(
                     text: const TextSpan(

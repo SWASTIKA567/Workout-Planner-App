@@ -76,7 +76,7 @@ class _GenderScreenState extends State<GenderScreen> {
                   const SizedBox(height: 130),
                   //Bottom Buttons
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       //  Next to Age screen
                       ElevatedButton.icon(
@@ -132,7 +132,9 @@ class _GenderScreenState extends State<GenderScreen> {
         height: 120,
         width: 120,
         decoration: BoxDecoration(
-          color: isSelected ? Color(0xFF004DFF) : Colors.white,
+          color: isSelected
+              ? Color(0xFF004DFF)
+              : const Color.fromARGB(255, 115, 148, 157),
           shape: BoxShape.circle,
         ),
         child: Column(

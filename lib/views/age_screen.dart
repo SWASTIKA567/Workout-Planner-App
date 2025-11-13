@@ -167,7 +167,7 @@ class _AgeScreenState extends State<AgeScreen> {
                           : null, // disabled if gender not selected
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF004DFF),
-                        disabledBackgroundColor: Colors.white,
+                        disabledBackgroundColor: Colors.lightBlueAccent,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30),
                         ),

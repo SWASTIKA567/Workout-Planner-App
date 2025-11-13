@@ -30,6 +30,11 @@ class _LevelScreenState extends State<LevelScreen> {
   bool isLoading = false;
 
   final List<String> levels = ['Beginner', 'Intermediate', 'Advanced'];
+  final Map<String, String> levelImages = {
+    'Beginner': 'assets/level1.jpeg',
+    'Intermediate': 'assets/level2.jpeg',
+    'Advanced': 'assets/level3.jpeg',
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -81,28 +86,45 @@ class _LevelScreenState extends State<LevelScreen> {
                     },
                     child: Container(
                       margin: const EdgeInsets.symmetric(
-                        vertical: 10,
-                        horizontal: 40,
+                        vertical: 20,
+                        horizontal: 20,
                       ),
-                      height: 100,
+                      height: 150,
                       width: double.infinity,
                       decoration: BoxDecoration(
-                        color: isSelected ? Colors.blue : Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(
-                          color: isSelected
-                              ? const Color(0xFF004DFF)
-                              : Colors.black,
-                          width: 2,
+                        image: DecorationImage(
+                          image: AssetImage(levelImages[level] ?? ''),
+                          fit: BoxFit.cover,
+                          colorFilter: isSelected
+                              ? ColorFilter.mode(
+                                  Colors.blue.withOpacity(0.6),
+                                  BlendMode.darken,
+                                )
+                              : null,
                         ),
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.3),
+                            spreadRadius: 6,
+                            blurRadius: 10,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
                       ),
-                      child: Center(
-                        child: Text(
-                          level,
-                          style: TextStyle(
-                            color: isSelected ? Colors.white : Colors.black,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
+
+                      child: Align(
+                        alignment: Alignment.bottomRight,
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+
+                          child: Text(
+                            level,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),

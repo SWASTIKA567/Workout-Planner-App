@@ -77,7 +77,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ClipPath(
             clipper: DiagonalClipper(),
             child: Container(
-              height: MediaQuery.of(context).size.height * 0.60,
+              height: MediaQuery.of(context).size.height * 0.57,
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage('assets/bg2.jpeg'),
@@ -145,15 +145,15 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     const Spacer(),
-                    // Welcome text
+
                     const Padding(
-                      padding: EdgeInsets.only(left: 24.0, bottom: 30),
+                      padding: EdgeInsets.only(left: 20.0, bottom: 120),
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
                           "WELCOME!",
                           style: TextStyle(
-                            fontSize: 40,
+                            fontSize: 35,
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
                             fontStyle: FontStyle.italic,
@@ -169,7 +169,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
           Expanded(
             child: Transform.translate(
-              offset: const Offset(0, -15),
+              offset: const Offset(0, -70),
               child: Container(
                 decoration: const BoxDecoration(
                   color: Colors.white,
@@ -347,10 +347,10 @@ class DiagonalClipper extends CustomClipper<Path> {
 
     // Start from top-left and draw clockwise
     path.moveTo(0, 0); // Top-left
-    path.lineTo(0, size.height - 60); // Left side, go all the way down
+    path.lineTo(0, size.height - 0); // Left side, go all the way down
     path.lineTo(
       size.width,
-      size.height - 200,
+      size.height - 250,
     ); // Diagonal cut - RIGHT side is 120px HIGHER
     path.lineTo(size.width, 0); // Right side to top
     path.close();
