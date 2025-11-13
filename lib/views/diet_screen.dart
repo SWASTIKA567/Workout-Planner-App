@@ -22,7 +22,7 @@ class DietScreen extends StatelessWidget {
   }) {
     return Container(
       width: 200,
-      height: 200,
+      height: 40,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: color,

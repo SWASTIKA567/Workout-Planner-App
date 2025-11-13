@@ -23,6 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String? fitnessLevel;
   bool isLoading = true;
   int? selectedDayIndex;
+  int? loadingDayIndex;
 
   final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
@@ -120,6 +121,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 decoration: BoxDecoration(
                   color: Colors.blueAccent,
                   borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.3),
+                      spreadRadius: 6,
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
                 ),
                 child: Padding(
                   padding: EdgeInsets.all(16.0),
@@ -178,6 +187,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         onPressed: () async {
                           setState(() {
                             selectedDayIndex = index;
+                            loadingDayIndex = index;
                           });
                           final user = _auth.currentUser;
                           if (user != null &&
@@ -196,6 +206,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           } else {
                             showSnackBar("Missing data. Try again.");
                           }
+                          setState(() {
+                            loadingDayIndex = null;
+                          });
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: selectedDayIndex == index
@@ -213,10 +226,21 @@ class _HomeScreenState extends State<HomeScreen> {
                             vertical: 16,
                           ),
                         ),
-                        child: Text(
-                          "Day ${index + 1}",
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
+                        child: loadingDayIndex == index
+                            ? const SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                  strokeWidth: 2,
+                                ),
+                              )
+                            : Text(
+                                "Day ${index + 1}",
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                       ),
                     );
                   }),
