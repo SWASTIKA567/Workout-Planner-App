@@ -22,13 +22,38 @@ class _LoginScreenState extends State<LoginScreen> {
     super.initState();
   }
 
+  String getLoginErrorMessage(String code) {
+    switch (code) {
+      case 'invalid-email':
+        return 'Please enter a valid email address.';
+      case 'user-disabled':
+        return 'This account has been disabled.';
+      case 'user-not-found':
+        return 'No account found for this email.';
+      case 'wrong-password':
+        return 'Incorrect password. Please try again.';
+      default:
+        return 'Login failed. Please check your credentials.';
+    }
+  }
+
+  void showSnackBar(String message, {Color color = Colors.blue}) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: color,
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
+
   Future<void> _login() async {
     final email = _emailC.text.trim();
     final pass = _passC.text.trim();
 
     if (email.isEmpty || pass.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Email and password cannot be empty")),
+        const SnackBar(content: Text("PLease enter both email and password")),
       );
       return;
     }
@@ -41,6 +66,9 @@ class _LoginScreenState extends State<LoginScreen> {
       );
 
       if (!mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Login successful!")));
 
       Navigator.pushReplacement(
         context,
@@ -50,7 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
       if (mounted) {
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(SnackBar(content: Text('Error: $e')));
+        ).showSnackBar(SnackBar(content: Text('Unexpected error occurred')));
       }
     } finally {
       if (mounted) {
@@ -169,7 +197,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
           Expanded(
             child: Transform.translate(
-              offset: const Offset(0, -70),
+              offset: const Offset(0, -20),
               child: Container(
                 decoration: const BoxDecoration(
                   color: Colors.white,
@@ -347,7 +375,7 @@ class DiagonalClipper extends CustomClipper<Path> {
 
     // Start from top-left and draw clockwise
     path.moveTo(0, 0); // Top-left
-    path.lineTo(0, size.height - 0); // Left side, go all the way down
+    path.lineTo(0, size.height - 50); // Left side, go all the way down
     path.lineTo(
       size.width,
       size.height - 250,

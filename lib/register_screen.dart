@@ -20,6 +20,31 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   bool _loading = false;
   bool obscurePassword = true;
+  String getSignUpErrorMessage(String code) {
+    switch (code) {
+      case 'email-already-in-use':
+        return 'This email is already registered.';
+      case 'invalid-email':
+        return 'Please enter a valid email address.';
+      case 'weak-password':
+        return 'Password must be at least 6 characters long.';
+      case 'operation-not-allowed':
+        return 'Email/password accounts are not enabled.';
+      default:
+        return 'Something went wrong. Please try again.';
+    }
+  }
+
+  void showSnackBar(String message, {Color color = Colors.lightBlue}) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: color,
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
+
   Future<void> _register() async {
     final name = _nameC.text.trim();
     final email = _emailC.text.trim();
@@ -54,7 +79,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       if (mounted) {
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(SnackBar(content: Text('Error: $e')));
+        ).showSnackBar(SnackBar(content: Text('Unexpected error occurred')));
       }
     } finally {
       if (mounted) {
