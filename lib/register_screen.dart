@@ -75,6 +75,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
         context,
         MaterialPageRoute(builder: (_) => const GenderScreen()),
       );
+    } on FirebaseAuthException catch (e) {
+      if (mounted) {
+        final errorMessage = getSignUpErrorMessage(e.code);
+        showSnackBar(errorMessage, color: Colors.red);
+      }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(

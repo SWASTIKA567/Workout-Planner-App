@@ -135,7 +135,7 @@ class _AgeScreenState extends State<AgeScreen> {
                         );
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF004DFF),
+                        backgroundColor: const Color(0xFFB1C8FF),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30),
                         ),
@@ -147,7 +147,7 @@ class _AgeScreenState extends State<AgeScreen> {
                       icon: const Icon(Icons.arrow_back_ios, size: 16),
                       label: const Text(
                         "Back",
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.black),
                       ),
                     ),
 
@@ -167,7 +167,7 @@ class _AgeScreenState extends State<AgeScreen> {
                           : null, // disabled if gender not selected
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF004DFF),
-                        disabledBackgroundColor: Colors.lightBlueAccent,
+                        disabledBackgroundColor: Color(0xFFB1C8FF),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30),
                         ),
@@ -179,7 +179,7 @@ class _AgeScreenState extends State<AgeScreen> {
                       icon: const Icon(Icons.arrow_forward_ios, size: 16),
                       label: const Text(
                         "Next",
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.black),
                       ),
                     ),
                   ],

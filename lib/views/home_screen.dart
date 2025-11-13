@@ -334,8 +334,8 @@ class _HomeScreenState extends State<HomeScreen> {
       bottomNavigationBar: Container(
         margin: const EdgeInsets.all(15),
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(25),
+          color: Colors.grey,
+          borderRadius: BorderRadius.circular(12),
           boxShadow: const [
             BoxShadow(
               color: Colors.black12,
@@ -348,8 +348,8 @@ class _HomeScreenState extends State<HomeScreen> {
           type: BottomNavigationBarType.fixed,
           backgroundColor: Colors.transparent,
           elevation: 0,
-          selectedItemColor: Colors.blueAccent,
-          unselectedItemColor: Colors.grey,
+          selectedItemColor: Color(0xFF004DFF),
+          unselectedItemColor: Colors.black,
           showSelectedLabels: false,
           showUnselectedLabels: false,
           currentIndex: _selectedIndex,
@@ -366,14 +366,9 @@ class _HomeScreenState extends State<HomeScreen> {
             } else if (index == 1) {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => LibraryScreen()),
-              );
-            } else if (index == 2) {
-              Navigator.pushReplacement(
-                context,
                 MaterialPageRoute(builder: (context) => const ChoiceScreen()),
               );
-            } else if (index == 3) {
+            } else if (index == 2) {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => const ProfileScreen()),
@@ -385,10 +380,7 @@ class _HomeScreenState extends State<HomeScreen> {
               icon: Icon(Icons.home_rounded),
               label: 'Home',
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.fitness_center_rounded),
-              label: 'Workouts',
-            ),
+
             BottomNavigationBarItem(
               icon: Icon(Icons.restaurant_menu_rounded),
               label: 'Diet',

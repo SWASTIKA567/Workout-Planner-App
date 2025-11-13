@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:workout_planner/views/home_screen.dart';
@@ -23,6 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   String getLoginErrorMessage(String code) {
+    log('Firebase Error Code: $code');
     switch (code) {
       case 'invalid-email':
         return 'Please enter a valid email address.';
@@ -33,7 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
       case 'wrong-password':
         return 'Incorrect password. Please try again.';
       default:
-        return 'Login failed. Please check your credentials.';
+        return 'Login failed: $code';
     }
   }
 
@@ -74,11 +77,17 @@ class _LoginScreenState extends State<LoginScreen> {
         context,
         MaterialPageRoute(builder: (_) => const HomeScreen()),
       );
+    } on FirebaseAuthException catch (e) {
+      if (mounted) {
+        final errorMessage = getLoginErrorMessage(e.code);
+        showSnackBar(errorMessage, color: Colors.red);
+      }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Unexpected error occurred')));
+        showSnackBar(
+          "An unexpected error occurred. Please try again.",
+          color: Colors.red,
+        );
       }
     } finally {
       if (mounted) {
@@ -175,7 +184,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     const Spacer(),
 
                     const Padding(
-                      padding: EdgeInsets.only(left: 20.0, bottom: 120),
+                      padding: EdgeInsets.only(left: 20.0, bottom: 140),
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: Text(

@@ -193,13 +193,13 @@ class DietScreen extends StatelessWidget {
                         title: "Calories",
                         value:
                             "${controller.caloriesKcal.value.toStringAsFixed(0)} kcal",
-                        color: Color(0xFF759EFF),
+                        color: Color(0xFFDBE4FF),
                       ),
                       buildSmallBox(
                         title: "Carbs",
                         value:
                             "${controller.carbsG.value.toStringAsFixed(0)} g",
-                        color: Colors.blue.shade400,
+                        color: Color(0xFFB1C8FF),
                       ),
                       buildSmallBox(
                         title: "Protein",

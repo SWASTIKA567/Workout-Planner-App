@@ -140,7 +140,7 @@ class _TargetWeightScreenState extends State<TargetWeightScreen> {
                         Navigator.pop(context);
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF004DFF),
+                        backgroundColor: const Color(0xFFB1C8FF),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30),
                         ),
@@ -175,7 +175,7 @@ class _TargetWeightScreenState extends State<TargetWeightScreen> {
                           : null, // disabled if gender not selected
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF004DFF),
-                        disabledBackgroundColor: Colors.grey.shade700,
+                        disabledBackgroundColor: Color(0xFFB1C8FF),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30),
                         ),

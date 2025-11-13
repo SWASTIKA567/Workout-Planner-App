@@ -148,7 +148,7 @@ class _LevelScreenState extends State<LevelScreen> {
                     ElevatedButton.icon(
                       onPressed: () => Navigator.pop(context),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF004DFF),
+                        backgroundColor: const Color(0xFFB1C8FF),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30),
                         ),
@@ -160,7 +160,7 @@ class _LevelScreenState extends State<LevelScreen> {
                       icon: const Icon(Icons.arrow_back_ios, size: 16),
                       label: const Text(
                         "Back",
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.black),
                       ),
                     ),
                     ElevatedButton.icon(
@@ -197,7 +197,7 @@ class _LevelScreenState extends State<LevelScreen> {
                           : null,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF004DFF),
-                        disabledBackgroundColor: Colors.grey.shade700,
+                        disabledBackgroundColor: Color(0xFFB1C8FF),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30),
                         ),

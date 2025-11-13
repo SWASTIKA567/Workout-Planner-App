@@ -30,89 +30,97 @@ class _GenderScreenState extends State<GenderScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                children: [
-                  Text(
-                    "Tell us about yourself !",
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF1E1E1E),
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(height: 20),
-                  Text(
-                    "To give you a better experience\n   by knowing your gender",
-                    style: TextStyle(fontSize: 16, color: Color(0xFF1E1E1E)),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 40),
-                  // profile icon
-                  CircleAvatar(
-                    radius: 40,
-                    backgroundColor: const Color.fromARGB(228, 248, 243, 243),
-                    child: Icon(
-                      Icons.person,
-                      size: 60,
-                      color: const Color.fromARGB(255, 21, 21, 21),
-                    ),
-                  ),
-                  const SizedBox(height: 70),
-
-                  // Gender Buttons
-                  Column(
-                    children: [
-                      genderButton("Female", "assets/female.svg"),
-                      const SizedBox(height: 60),
-                      genderButton("Male", "assets/male.svg"),
-                    ],
-                  ),
-                  const SizedBox(height: 130),
-                  //Bottom Buttons
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      //  Next to Age screen
-                      ElevatedButton.icon(
-                        onPressed: selectedGender != null
-                            ? () {
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        AgeScreen(gender: selectedGender!),
-                                  ),
-                                );
-                              }
-                            : null, // disabled if gender not selected
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF004DFF),
-                          disabledBackgroundColor: Color(0XFFB1C8FF),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 25,
-                            vertical: 12,
-                          ),
-                        ),
-                        icon: const Icon(Icons.arrow_forward_ios, size: 16),
-                        label: const Text(
-                          "Next",
-                          style: TextStyle(color: Colors.white),
-                        ),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  children: [
+                    Text(
+                      "Tell us about yourself !",
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF1E1E1E),
                       ),
-                    ],
-                  ),
-                ],
-              ),
-            ],
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(height: 20),
+                    Text(
+                      "To give you a better experience\n   by knowing your gender",
+                      style: TextStyle(fontSize: 16, color: Color(0xFF1E1E1E)),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 40),
+                    // profile icon
+                    CircleAvatar(
+                      radius: 40,
+                      backgroundColor: const Color.fromARGB(228, 248, 243, 243),
+                      child: Icon(
+                        Icons.person,
+                        size: 60,
+                        color: const Color.fromARGB(255, 21, 21, 21),
+                      ),
+                    ),
+                    const SizedBox(height: 70),
+
+                    // Gender Buttons
+                    Column(
+                      children: [
+                        genderButton("Female", "assets/female.svg"),
+                        const SizedBox(height: 60),
+                        genderButton("Male", "assets/male.svg"),
+                      ],
+                    ),
+                    const SizedBox(height: 130),
+                    //Bottom Buttons
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 20,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          //  Next to Age screen
+                          ElevatedButton.icon(
+                            onPressed: selectedGender != null
+                                ? () {
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            AgeScreen(gender: selectedGender!),
+                                      ),
+                                    );
+                                  }
+                                : null, // disabled if gender not selected
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFF004DFF),
+                              disabledBackgroundColor: Color(0xFFB1C8FF),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 25,
+                                vertical: 12,
+                              ),
+                            ),
+                            icon: const Icon(Icons.arrow_forward_ios, size: 16),
+                            label: const Text(
+                              "Next",
+                              style: TextStyle(color: Colors.black),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -132,9 +140,7 @@ class _GenderScreenState extends State<GenderScreen> {
         height: 120,
         width: 120,
         decoration: BoxDecoration(
-          color: isSelected
-              ? Color(0xFF004DFF)
-              : const Color.fromARGB(255, 115, 148, 157),
+          color: isSelected ? Color(0xFF004DFF) : const Color(0xFFB1C8FF),
           shape: BoxShape.circle,
         ),
         child: Column(

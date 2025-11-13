@@ -88,7 +88,9 @@ class _GoalScreenState extends State<GoalScreen> {
                       height: 60,
                       width: double.infinity,
                       decoration: BoxDecoration(
-                        color: isSelected ? Colors.blue : Color(0xFFE4E4E4),
+                        color: isSelected
+                            ? Color(0xFF004DFF)
+                            : Color(0xFFE4E4E4),
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
                           color: isSelected ? Color(0xFF004DFF) : Colors.grey,
@@ -126,7 +128,7 @@ class _GoalScreenState extends State<GoalScreen> {
                         Navigator.pop(context);
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF004DFF),
+                        backgroundColor: const Color(0xFFB1C8FF),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30),
                         ),
@@ -162,7 +164,7 @@ class _GoalScreenState extends State<GoalScreen> {
                           : null,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF004DFF),
-                        disabledBackgroundColor: Colors.grey.shade700,
+                        disabledBackgroundColor: Color(0xFFB1C8FF),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30),
                         ),

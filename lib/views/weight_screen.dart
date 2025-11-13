@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'height_screen.dart';
 
@@ -17,7 +19,7 @@ class _WeightScreenState extends State<WeightScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print('Gender: ${widget.gender}, Age : ${widget.age}');
+    log('Gender: ${widget.gender}, Age : ${widget.age}');
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -131,7 +133,7 @@ class _WeightScreenState extends State<WeightScreen> {
                         Navigator.pop(context);
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF004DFF),
+                        backgroundColor: const Color(0xFFB1C8FF),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30),
                         ),
@@ -143,7 +145,7 @@ class _WeightScreenState extends State<WeightScreen> {
                       icon: const Icon(Icons.arrow_back_ios, size: 16),
                       label: const Text(
                         "Back",
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.black),
                       ),
                     ),
 
@@ -164,7 +166,7 @@ class _WeightScreenState extends State<WeightScreen> {
                           : null, // disabled if gender not selected
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF004DFF),
-                        disabledBackgroundColor: Colors.grey.shade700,
+                        disabledBackgroundColor: Color(0xFFB1C8FF),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30),
                         ),
@@ -176,7 +178,7 @@ class _WeightScreenState extends State<WeightScreen> {
                       icon: const Icon(Icons.arrow_forward_ios, size: 16),
                       label: const Text(
                         "Next",
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.black),
                       ),
                     ),
                   ],
