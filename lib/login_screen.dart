@@ -323,20 +323,15 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 }
 
-//  FIX 4: Corrected DiagonalClipper - VERY VISIBLE
 class DiagonalClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
     final path = Path();
 
-    // Start from top-left and draw clockwise
-    path.moveTo(0, 0); // Top-left
-    path.lineTo(0, size.height - 50); // Left side, go all the way down
-    path.lineTo(
-      size.width,
-      size.height - 250,
-    ); // Diagonal cut - RIGHT side is 120px HIGHER
-    path.lineTo(size.width, 0); // Right side to top
+    path.moveTo(0, 0);
+    path.lineTo(0, size.height - 50);
+    path.lineTo(size.width, size.height - 250);
+    path.lineTo(size.width, 0);
     path.close();
 
     return path;

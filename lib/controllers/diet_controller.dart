@@ -41,11 +41,10 @@ class DietController extends GetxController {
               ? workoutPlans['day_index']
               : int.tryParse(workoutPlans['day_index']?.toString() ?? '0') ?? 0;
 
-          // Only fetch new diet if day_index actually changed
           if (newDayIndex != dayIndex.value) {
             log("Day index changed from ${dayIndex.value} to $newDayIndex");
             dayIndex.value = newDayIndex;
-            fetchDietFromAPI(); // Automatically fetch new diet plan
+            fetchDietFromAPI();
           }
         }
       }

@@ -54,7 +54,7 @@ class _GenderScreenState extends State<GenderScreen> {
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 40),
-                    // profile icon
+                    
                     CircleAvatar(
                       radius: 40,
                       backgroundColor: const Color.fromARGB(228, 248, 243, 243),
@@ -66,7 +66,7 @@ class _GenderScreenState extends State<GenderScreen> {
                     ),
                     const SizedBox(height: 70),
 
-                    // Gender Buttons
+                    
                     Column(
                       children: [
                         genderButton("Female", "assets/female.svg"),
@@ -75,7 +75,7 @@ class _GenderScreenState extends State<GenderScreen> {
                       ],
                     ),
                     const SizedBox(height: 130),
-                    //Bottom Buttons
+                  
                     Padding(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 20,
@@ -84,7 +84,7 @@ class _GenderScreenState extends State<GenderScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          //  Next to Age screen
+                        
                           ElevatedButton.icon(
                             onPressed: selectedGender != null
                                 ? () {
@@ -96,7 +96,7 @@ class _GenderScreenState extends State<GenderScreen> {
                                       ),
                                     );
                                   }
-                                : null, // disabled if gender not selected
+                                : null, 
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xFF004DFF),
                               disabledBackgroundColor: Color(0xFFB1C8FF),
