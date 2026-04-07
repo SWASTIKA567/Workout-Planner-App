@@ -4,19 +4,19 @@ import 'package:http/http.dart' as http;
 import '/models/user_input_model.dart';
 
 class ApiController {
-  final String baseUrl = "https://workout-type-api.onrender.com";
+  final String baseUrl = "https://workout-type-recommendation-api.onrender.com";
 
-  Future<String?> fetchWorkoutType(UserInputModel input) async {
+  Future<Map<String, dynamic>?> fetchWorkoutType(UserInputModel input) async {
     try {
       final response = await http.post(
-        Uri.parse("https://workout-type-api.onrender.com/predict_workout_type"),
+        Uri.parse("$baseUrl/predict"),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode(input.toJson()),
       );
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        return data["workout_type"];
+        return {"workout_type": data["workout_type"], "bmi": data["bmi"]};
       } else {
         log("Error: ${response.statusCode}");
         return null;

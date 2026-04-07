@@ -20,6 +20,29 @@ class _HeightScreenState extends State<HeightScreen> {
   int? selectedHeight;
   final FixedExtentScrollController _scrollController =
       FixedExtentScrollController();
+
+  double? get bmi {
+    if (selectedHeight == null) return null;
+    final heightInMeters = selectedHeight! / 100.0;
+    return widget.weight / (heightInMeters * heightInMeters);
+  }
+
+  String get bmiCategory {
+    if (bmi == null) return '';
+    if (bmi! < 18.5) return 'Underweight';
+    if (bmi! < 25.0) return 'Normal';
+    if (bmi! < 30.0) return 'Overweight';
+    return 'Obese';
+  }
+
+  Color get bmiColor {
+    if (bmi == null) return Colors.grey;
+    if (bmi! < 18.5) return Colors.blue;
+    if (bmi! < 25.0) return Colors.green;
+    if (bmi! < 30.0) return Colors.orange;
+    return Colors.red;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,6 +78,68 @@ class _HeightScreenState extends State<HeightScreen> {
                     color: Colors.black,
                     size: 60,
                   ),
+                ),
+
+                AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 300),
+                  child: bmi != null
+                      ? Container(
+                          key: ValueKey(bmi!.toStringAsFixed(1)),
+                          margin: const EdgeInsets.symmetric(horizontal: 40),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 24,
+                            vertical: 14,
+                          ),
+                          decoration: BoxDecoration(
+                            color: bmiColor.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(
+                              color: bmiColor.withOpacity(0.4),
+                              width: 1.5,
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Column(
+                                children: [
+                                  Text(
+                                    'BMI',
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      color: Colors.grey[600],
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  Text(
+                                    bmi!.toStringAsFixed(1),
+                                    style: TextStyle(
+                                      fontSize: 32,
+                                      fontWeight: FontWeight.bold,
+                                      color: bmiColor,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(width: 20),
+                              Container(
+                                width: 1,
+                                height: 40,
+                                color: Colors.grey[300],
+                              ),
+                              const SizedBox(width: 20),
+                              Text(
+                                bmiCategory,
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600,
+                                  color: bmiColor,
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      : const SizedBox(height: 56),
                 ),
 
                 const SizedBox(height: 60),
