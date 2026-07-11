@@ -24,10 +24,11 @@ class GoalScreen extends StatefulWidget {
 class _GoalScreenState extends State<GoalScreen> {
   String? selectedGoal;
   final List<String> goals = [
-    'Flexibility',
-    'Muscle Gain',
+    'General Fitness',
     'Weight Loss',
+    'Muscle Gain',
     'Endurance',
+    'Flexibility',
   ];
   @override
   Widget build(BuildContext context) {

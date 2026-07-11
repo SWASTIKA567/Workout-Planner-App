@@ -21,6 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   String? workoutType;
   String? fitnessLevel;
+  double? bmi;
   bool isLoading = true;
   int? selectedDayIndex;
   int? loadingDayIndex;
@@ -95,6 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
         setState(() {
           workoutType = doc['workout_type'];
           fitnessLevel = doc['inputs']['fitness_level'];
+          bmi = (data['bmi'] as num?)?.toDouble();
           isLoading = false;
         });
         log("Fetched data -> Type: $workoutType | Level : $fitnessLevel");
@@ -158,67 +160,86 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Center(
                     child: isLoading
                         ? const CircularProgressIndicator(color: Colors.white)
-                        : Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.start,
-
-                            children: [
-                              Text(
-                                "Your Workout type is",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Color(0xFF7B4FA3),
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-
-                              const SizedBox(height: 10),
-                              Text(
-                                workoutType ?? " Not available yet",
-                                textAlign: TextAlign.center,
-
-                                style: const TextStyle(
-                                  color: Color(0xFF7B4FA3),
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.bold,
-                                  fontStyle: FontStyle.italic,
-                                ),
-                              ),
-                              const SizedBox(height: 25),
-
-                              if (workoutType != null &&
-                                  workoutData.containsKey(workoutType))
-                                Image.asset(
-                                  workoutData[workoutType]!["image"]!,
-                                  height: 200,
-                                  fit: BoxFit.contain,
-                                ),
-
-                              const SizedBox(height: 20),
-
-                              if (workoutType != null &&
-                                  workoutData.containsKey(workoutType))
+                        : SingleChildScrollView(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
                                 Text(
-                                  workoutData[workoutType]!["description"]!,
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.black54,
-                                    height: 1.6,
-                                  ),
-                                ),
-                              if (workoutType == null)
-                                Text(
-                                  "Please complete the setup to see your workout plan.",
+                                  "Your Workout type is",
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.black54,
-                                    height: 1.6,
+                                    color: Color(0xFF7B4FA3),
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                            ],
+                                const SizedBox(height: 8),
+                                Text(
+                                  workoutType != null
+                                      ? workoutType![0].toUpperCase() +
+                                          workoutType!.substring(1)
+                                      : "Not available yet",
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    color: Color(0xFF7B4FA3),
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.bold,
+                                    fontStyle: FontStyle.italic,
+                                  ),
+                                ),
+                                const SizedBox(height: 16),
+
+                                if (workoutType != null &&
+                                    workoutData.containsKey(
+                                      workoutType![0].toUpperCase() +
+                                          workoutType!.substring(1),
+                                    ))
+                                  Image.asset(
+                                    workoutData[workoutType![0].toUpperCase() +
+                                        workoutType!.substring(1)]!["image"]!,
+                                    height: 140,
+                                    fit: BoxFit.contain,
+                                  ),
+
+                                const SizedBox(height: 12),
+
+                                if (workoutType != null &&
+                                    workoutData.containsKey(
+                                      workoutType![0].toUpperCase() +
+                                          workoutType!.substring(1),
+                                    ))
+                                  Text(
+                                    workoutData[workoutType![0].toUpperCase() +
+                                        workoutType!.substring(1)]!["description"]!,
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.black54,
+                                      height: 1.6,
+                                    ),
+                                  ),
+
+                                if (workoutType == null)
+                                  const Text(
+                                    "Please complete the setup to see your workout plan.",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.black54,
+                                      height: 1.6,
+                                    ),
+                                  ),
+
+                                // ── BMI Section ──
+                                if (bmi != null) ...[  
+                                  const SizedBox(height: 20),
+                                  const Divider(thickness: 1),
+                                  const SizedBox(height: 12),
+                                  _buildBmiSection(),
+                                ],
+                              ],
+                            ),
                           ),
                   ),
                 ),
@@ -293,6 +314,112 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildBmiSection() {
+    if (bmi == null) return const SizedBox.shrink();
+
+    String category;
+    Color categoryColor;
+    String emoji;
+
+    if (bmi! < 18.5) {
+      category = 'Underweight';
+      categoryColor = const Color(0xFF2196F3);
+      emoji = '⚖️';
+    } else if (bmi! < 25.0) {
+      category = 'Normal';
+      categoryColor = const Color(0xFF4CAF50);
+      emoji = '✅';
+    } else if (bmi! < 30.0) {
+      category = 'Overweight';
+      categoryColor = const Color(0xFFFF9800);
+      emoji = '⚠️';
+    } else {
+      category = 'Obese';
+      categoryColor = const Color(0xFFF44336);
+      emoji = '🔴';
+    }
+
+    // Clamp BMI for progress bar: 10 to 40 range
+    final double progress = ((bmi! - 10) / 30).clamp(0.0, 1.0);
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const Text(
+            "Your BMI",
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF7B4FA3),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.baseline,
+            textBaseline: TextBaseline.alphabetic,
+            children: [
+              Text(
+                bmi!.toStringAsFixed(1),
+                style: TextStyle(
+                  fontSize: 38,
+                  fontWeight: FontWeight.bold,
+                  color: categoryColor,
+                ),
+              ),
+              const SizedBox(width: 6),
+              Text(
+                'kg/m²',
+                style: TextStyle(fontSize: 14, color: Colors.grey.shade500),
+              ),
+            ],
+          ),
+          const SizedBox(height: 6),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 5),
+            decoration: BoxDecoration(
+              color: categoryColor.withOpacity(0.12),
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: categoryColor.withOpacity(0.4)),
+            ),
+            child: Text(
+              '$emoji  $category',
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                color: categoryColor,
+              ),
+            ),
+          ),
+          const SizedBox(height: 14),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: LinearProgressIndicator(
+              value: progress,
+              minHeight: 10,
+              backgroundColor: Colors.grey.shade200,
+              valueColor: AlwaysStoppedAnimation<Color>(categoryColor),
+            ),
+          ),
+          const SizedBox(height: 6),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: const [
+              Text('10', style: TextStyle(fontSize: 11, color: Colors.grey)),
+              Text('18.5', style: TextStyle(fontSize: 11, color: Colors.grey)),
+              Text('25', style: TextStyle(fontSize: 11, color: Colors.grey)),
+              Text('30', style: TextStyle(fontSize: 11, color: Colors.grey)),
+              Text('40+', style: TextStyle(fontSize: 11, color: Colors.grey)),
+            ],
+          ),
+        ],
       ),
     );
   }

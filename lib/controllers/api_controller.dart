@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import '/models/user_input_model.dart';
 
 class ApiController {
-  final String baseUrl = "https://workout-type-recommendation-api.onrender.com";
+  final String baseUrl = "https://workout-type-recommendation-1.onrender.com";
 
   Future<Map<String, dynamic>?> fetchWorkoutType(UserInputModel input) async {
     try {

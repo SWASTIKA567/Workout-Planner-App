@@ -6,6 +6,9 @@ class UserInputModel {
   int age;
   int weightKg;
   String fitnessLevel;
+  String intensityPreference;
+  String primaryFocus;
+  String equipmentAccess;
 
   UserInputModel({
     required this.heightCm,
@@ -15,6 +18,9 @@ class UserInputModel {
     required this.age,
     required this.weightKg,
     required this.fitnessLevel,
+    required this.intensityPreference,
+    required this.primaryFocus,
+    required this.equipmentAccess,
   });
 
   Map<String, dynamic> toJson() {
@@ -26,6 +32,9 @@ class UserInputModel {
       "age": age,
       "weight_kg": weightKg,
       "fitness_level": fitnessLevel,
+      "intensity_preference": intensityPreference,
+      "primary_focus": primaryFocus,
+      "equipment_access": equipmentAccess,
     };
   }
 }

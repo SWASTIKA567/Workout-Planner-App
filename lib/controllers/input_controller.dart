@@ -11,12 +11,13 @@ class InputController {
   Future<void> submitInputs(UserInputModel input) async {
     final userId = _auth.currentUser!.uid;
 
-    final workoutType = await _api.fetchWorkoutType(input);
+    final result = await _api.fetchWorkoutType(input);
 
-    if (workoutType != null) {
+    if (result != null) {
       await _firestore.collection("users").doc(userId).set({
         "inputs": input.toJson(),
-        "workout_type": workoutType,
+        "workout_type": result["workout_type"],
+        "bmi": result["bmi"],
         "isSetupComplete": true,
         "timestamp": FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));

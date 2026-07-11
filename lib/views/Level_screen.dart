@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../controllers/input_controller.dart';
-import '../../models/user_input_model.dart';
-import 'home_screen.dart';
+import 'intensity_screen.dart';
 
 class LevelScreen extends StatefulWidget {
   final String gender;
@@ -27,7 +25,6 @@ class LevelScreen extends StatefulWidget {
 
 class _LevelScreenState extends State<LevelScreen> {
   String? selectedLevel;
-  bool isLoading = false;
 
   final List<String> levels = ['Beginner', 'Intermediate', 'Advanced'];
   final Map<String, String> levelImages = {
@@ -165,39 +162,26 @@ class _LevelScreenState extends State<LevelScreen> {
                     ),
                     ElevatedButton.icon(
                       onPressed: selectedLevel != null
-                          ? () async {
-                              setState(() => isLoading = true);
-
-                              // Create input model
-                              final input = UserInputModel(
-                                heightCm: widget.height,
-                                targetWeight: widget.targetweight,
-                                goal: widget.goal,
-                                gender: widget.gender,
-                                age: widget.age,
-                                weightKg: widget.weight,
-                                fitnessLevel: selectedLevel!,
-                              );
-
-                              //  Call API
-                              final controller = InputController();
-
-                              await controller.submitInputs(input);
-
-                              setState(() => isLoading = false);
-
-                              Navigator.pushAndRemoveUntil(
+                          ? () {
+                              Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => HomeScreen(),
+                                  builder: (context) => IntensityScreen(
+                                    gender: widget.gender,
+                                    age: widget.age,
+                                    weight: widget.weight,
+                                    height: widget.height,
+                                    targetweight: widget.targetweight,
+                                    goal: widget.goal,
+                                    fitnessLevel: selectedLevel!,
+                                  ),
                                 ),
-                                (Route<dynamic> route) => false,
                               );
                             }
                           : null,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF004DFF),
-                        disabledBackgroundColor: Color(0xFFB1C8FF),
+                        disabledBackgroundColor: const Color(0xFFB1C8FF),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30),
                         ),
@@ -207,12 +191,10 @@ class _LevelScreenState extends State<LevelScreen> {
                         ),
                       ),
                       icon: const Icon(Icons.arrow_forward_ios, size: 16),
-                      label: isLoading
-                          ? const CircularProgressIndicator(color: Colors.white)
-                          : const Text(
-                              "Next",
-                              style: TextStyle(color: Colors.black),
-                            ),
+                      label: const Text(
+                        "Next",
+                        style: TextStyle(color: Colors.black),
+                      ),
                     ),
                   ],
                 ),
