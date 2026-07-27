@@ -20,6 +20,7 @@ class InputController {
         "bmi": result["bmi"],
         "isSetupComplete": true,
         "timestamp": FieldValue.serverTimestamp(),
+        "start_date": FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
     }
   }

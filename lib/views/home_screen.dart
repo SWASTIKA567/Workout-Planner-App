@@ -9,6 +9,7 @@ import 'dart:convert';
 import '/controllers/api2_controller.dart';
 import 'choice_screen.dart';
 import 'profile_screen.dart';
+import 'workout_plan_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

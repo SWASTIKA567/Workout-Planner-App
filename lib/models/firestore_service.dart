@@ -16,7 +16,7 @@ class FirestoreService {
     return null;
   }
 
-  // store API 2 output plan
+  // store API 2 output plan for a specific day
   Future<void> saveWorkoutPlan(
     String userId,
     int dayIndex,
@@ -28,6 +28,24 @@ class FirestoreService {
       }, SetOptions(merge: true));
     } catch (e) {
       log("Error saving plan: $e");
+    }
+  }
+
+  // store full weekly workout plan
+  Future<void> saveWeeklyWorkoutPlan(
+    String userId,
+    int weekNumber,
+    Map<String, dynamic> weeklyPlan,
+  ) async {
+    try {
+      await _firestore.collection('users').doc(userId).set({
+        'weekly_workout_plans': {
+          'week_$weekNumber': weeklyPlan,
+        },
+        'current_week': weekNumber,
+      }, SetOptions(merge: true));
+    } catch (e) {
+      log("Error saving weekly plan: $e");
     }
   }
 }
