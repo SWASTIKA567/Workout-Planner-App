@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
-import 'package:workout_planner/views/library_screen.dart';
-import 'dart:convert';
 import '/controllers/api2_controller.dart';
 import 'choice_screen.dart';
 import 'profile_screen.dart';
@@ -221,6 +219,40 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   ),
 
+                                 if (workoutType != null) ...[
+                                   const SizedBox(height: 20),
+                                   ElevatedButton.icon(
+                                     onPressed: () {
+                                       Navigator.push(
+                                         context,
+                                         MaterialPageRoute(
+                                           builder: (_) => const WorkoutPlanScreen(),
+                                         ),
+                                       );
+                                     },
+                                     style: ElevatedButton.styleFrom(
+                                       backgroundColor: const Color(0xFF7B4FA3),
+                                       foregroundColor: Colors.white,
+                                       padding: const EdgeInsets.symmetric(
+                                         horizontal: 24,
+                                         vertical: 14,
+                                       ),
+                                       shape: RoundedRectangleBorder(
+                                         borderRadius: BorderRadius.circular(25),
+                                       ),
+                                       elevation: 4,
+                                     ),
+                                     icon: const Icon(Icons.fitness_center_rounded, size: 20),
+                                     label: const Text(
+                                       "View Weekly Exercise Plan",
+                                       style: TextStyle(
+                                         fontSize: 15,
+                                         fontWeight: FontWeight.bold,
+                                       ),
+                                     ),
+                                   ),
+                                 ],
+
                                 if (workoutType == null)
                                   const Text(
                                     "Please complete the setup to see your workout plan.",
@@ -288,21 +320,30 @@ class _HomeScreenState extends State<HomeScreen> {
                   MaterialPageRoute(builder: (_) => const HomeScreen()),
                 );
               } else if (index == 1) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const WorkoutPlanScreen()),
+                );
+              } else if (index == 2) {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (_) => const ChoiceScreen()),
                 );
-              } else if (index == 2) {
+              } else if (index == 3) {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (_) => const ProfileScreen()),
                 );
               }
             },
-            items: [
+            items: const [
               BottomNavigationBarItem(
                 icon: Icon(Icons.home_rounded),
                 label: "Home",
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.fitness_center_rounded),
+                label: "Workouts",
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.restaurant_menu_rounded),
